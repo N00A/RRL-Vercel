@@ -10,7 +10,7 @@ export default function Home() {
         <div>
           <h1 className="text-3xl font-bold">Panel de Control</h1>
           <p className="text-white/60 mt-1">
-            Torneos de Mario Kart
+            Rainbow Roads League — Temporada 2026-1
           </p>
         </div>
       </div>

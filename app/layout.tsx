@@ -4,8 +4,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "Torneos Manager",
-  description: "Gestion de resultados de torneos",
+  title: "Rainbow Roads League | RRL",
+  description: "Liga oficial de Mario Kart 8 — Resultados, clasificacion y estadisticas",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
