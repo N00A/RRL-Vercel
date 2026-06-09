@@ -12,7 +12,6 @@ import type {
   RaceResult,
   PlayerStanding,
 } from "./types";
-import { seedTournaments, seedTeams, seedMatches, seedRaceResults } from "./seed";
 import { PUNTOS_POR_POSICION, PENALIZACIONES } from "@/constants/tournament";
 
 const DATA_DIR =
@@ -52,29 +51,8 @@ function writeJson<T>(filename: string, data: T) {
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
 }
 
-function initData() {
-  if (
-    !fs.existsSync(path.join(DATA_DIR, TOURNAMENTS_FILE)) &&
-    process.env.VERCEL !== "1"
-  ) {
-    ensureDir(DATA_DIR);
-    writeJson(TOURNAMENTS_FILE, seedTournaments);
-    writeJson(TEAMS_FILE, seedTeams);
-    writeJson(MATCHES_FILE, seedMatches);
-  }
-  const resultsPath = path.join(DATA_DIR, RESULTS_FILE);
-  if (
-    !fs.existsSync(resultsPath) ||
-    fs.readFileSync(resultsPath, "utf-8").trim() === "[]"
-  ) {
-    writeJson(RESULTS_FILE, seedRaceResults);
-  }
-}
-
-initData();
-
 function getTournaments(): Tournament[] {
-  return readJson<Tournament[]>(TOURNAMENTS_FILE, seedTournaments);
+  return readJson<Tournament[]>(TOURNAMENTS_FILE, []);
 }
 
 function saveTournaments(data: Tournament[]) {
@@ -82,7 +60,7 @@ function saveTournaments(data: Tournament[]) {
 }
 
 function getTeams(): Team[] {
-  return readJson<Team[]>(TEAMS_FILE, seedTeams);
+  return readJson<Team[]>(TEAMS_FILE, []);
 }
 
 function saveTeams(data: Team[]) {
@@ -90,7 +68,7 @@ function saveTeams(data: Team[]) {
 }
 
 function getMatches(): Match[] {
-  return readJson<Match[]>(MATCHES_FILE, seedMatches);
+  return readJson<Match[]>(MATCHES_FILE, []);
 }
 
 function saveMatches(data: Match[]) {
@@ -268,7 +246,7 @@ export function deleteMatch(id: string): boolean {
 }
 
 function getResults(): RaceResult[] {
-  return readJson<RaceResult[]>(RESULTS_FILE, seedRaceResults);
+  return readJson<RaceResult[]>(RESULTS_FILE, []);
 }
 
 function saveResults(data: RaceResult[]) {
