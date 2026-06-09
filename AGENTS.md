@@ -9,7 +9,7 @@
 ## Architecture
 
 - **JSON file storage** in `lib/storage.ts` — reads/writes `data/*.json` locally, `/tmp/data` on Vercel
-- Seed data (`lib/seed.ts`) auto-populates on first run when no files exist
+- No seed data — all data lives in `data/*.json` files (tracked by git, deployed to Vercel)
 - IDs generated via `uuid` v4
 
 ## Routes
@@ -35,13 +35,13 @@
 - UI in Spanish (`lang="es"`), locale date format `"es"`
 - Matches compute winnerId and status automatically when scores are set
 - Standings sorting: points → goalDiff → goalsFor (all descending)
-- `.gitignore` excludes: `node_modules`, `.next`, `data/`
+- `.gitignore` excludes: `node_modules`, `.next`
 
 ## Vercel
 
 - Deploy as standard Next.js project (no special config needed)
-- Written JSON goes to `/tmp/data` — persists per instance only, resets on cold start
-- Remove `&& process.env.VERCEL !== "1"` guard in `storage.ts:initData()` if you want seed data on Vercel
+- `data/` folder is tracked by git and deployed — JSON files persist on Vercel
+- Written JSON goes to `/tmp/data` (on Vercel) — persists per instance only, resets on cold start
 
 ## MK8 Scoring System
 
