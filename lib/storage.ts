@@ -19,6 +19,8 @@ const DATA_DIR =
     ? "/tmp/data"
     : path.join(process.cwd(), "data");
 
+const SOURCE_DATA_DIR = path.join(process.cwd(), "data");
+
 const TOURNAMENTS_FILE = "tournaments.json";
 const TEAMS_FILE = "teams.json";
 const MATCHES_FILE = "matches.json";
@@ -34,8 +36,13 @@ function readJson<T>(filename: string, fallback: T): T {
   ensureDir(DATA_DIR);
   const filePath = path.join(DATA_DIR, filename);
   if (!fs.existsSync(filePath)) {
-    writeJson(filename, fallback);
-    return fallback;
+    const sourcePath = path.join(SOURCE_DATA_DIR, filename);
+    if (fs.existsSync(sourcePath)) {
+      fs.copyFileSync(sourcePath, filePath);
+    } else {
+      writeJson(filename, fallback);
+      return fallback;
+    }
   }
   try {
     const raw = fs.readFileSync(filePath, "utf-8");
