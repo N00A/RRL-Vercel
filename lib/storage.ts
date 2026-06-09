@@ -14,12 +14,11 @@ import type {
 } from "./types";
 import { PUNTOS_POR_POSICION, PENALIZACIONES } from "@/constants/tournament";
 
-const DATA_DIR =
-  process.env.VERCEL === "1"
-    ? "/tmp/data"
-    : path.join(process.cwd(), "data");
+const isVercel = process.env.VERCEL === "1";
 
-const SOURCE_DATA_DIR = path.join(process.cwd(), "data");
+const DATA_DIR = isVercel ? "/tmp/data" : path.join(process.cwd(), "data");
+
+const DEPLOYED_DATA_DIR = path.join(process.cwd(), "data");
 
 const TOURNAMENTS_FILE = "tournaments.json";
 const TEAMS_FILE = "teams.json";
@@ -32,24 +31,47 @@ function ensureDir(dir: string) {
   }
 }
 
+function readFile(filename: string): string | null {
+  const searchPaths = isVercel
+    ? [DATA_DIR, DEPLOYED_DATA_DIR]
+    : [DATA_DIR];
+
+  for (const dir of searchPaths) {
+    const filePath = path.join(dir, filename);
+    if (fs.existsSync(filePath)) {
+      try {
+        return fs.readFileSync(filePath, "utf-8");
+      } catch {
+        return null;
+      }
+    }
+  }
+  return null;
+}
+
+function ensureFile(filename: string) {
+  if (isVercel) {
+    const deployedPath = path.join(DEPLOYED_DATA_DIR, filename);
+    const writePath = path.join(DATA_DIR, filename);
+    if (!fs.existsSync(writePath) && fs.existsSync(deployedPath)) {
+      fs.copyFileSync(deployedPath, writePath);
+    }
+  }
+}
+
 function readJson<T>(filename: string, fallback: T): T {
   ensureDir(DATA_DIR);
-  const filePath = path.join(DATA_DIR, filename);
-  if (!fs.existsSync(filePath)) {
-    const sourcePath = path.join(SOURCE_DATA_DIR, filename);
-    if (fs.existsSync(sourcePath)) {
-      fs.copyFileSync(sourcePath, filePath);
-    } else {
-      writeJson(filename, fallback);
+  ensureFile(filename);
+  const raw = readFile(filename);
+  if (raw !== null) {
+    try {
+      return JSON.parse(raw) as T;
+    } catch {
       return fallback;
     }
   }
-  try {
-    const raw = fs.readFileSync(filePath, "utf-8");
-    return JSON.parse(raw) as T;
-  } catch {
-    return fallback;
-  }
+  writeJson(filename, fallback);
+  return fallback;
 }
 
 function writeJson<T>(filename: string, data: T) {
