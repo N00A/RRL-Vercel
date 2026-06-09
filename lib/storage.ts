@@ -13,12 +13,14 @@ import type {
   PlayerStanding,
 } from "./types";
 import { PUNTOS_POR_POSICION, PENALIZACIONES } from "@/constants/tournament";
+import sourceTournaments from "@/data/tournaments.json";
+import sourceTeams from "@/data/teams.json";
+import sourceMatches from "@/data/matches.json";
+import sourceRaceResults from "@/data/results.json";
 
 const isVercel = process.env.VERCEL === "1";
 
-const DATA_DIR = isVercel ? "/tmp/data" : path.join(process.cwd(), "data");
-
-const DEPLOYED_DATA_DIR = path.join(process.cwd(), "data");
+const WRITE_DIR = isVercel ? "/tmp/data" : path.join(process.cwd(), "data");
 
 const TOURNAMENTS_FILE = "tournaments.json";
 const TEAMS_FILE = "teams.json";
@@ -26,82 +28,78 @@ const MATCHES_FILE = "matches.json";
 const RESULTS_FILE = "results.json";
 
 function ensureDir(dir: string) {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 }
 
-function readFile(filename: string): string | null {
-  const searchPaths = isVercel
-    ? [DATA_DIR, DEPLOYED_DATA_DIR]
-    : [DATA_DIR];
-
-  for (const dir of searchPaths) {
-    const filePath = path.join(dir, filename);
-    if (fs.existsSync(filePath)) {
-      try {
-        return fs.readFileSync(filePath, "utf-8");
-      } catch {
-        return null;
-      }
+function readFromDisk<T>(filename: string): T | null {
+  const filePath = path.join(WRITE_DIR, filename);
+  if (fs.existsSync(filePath)) {
+    try {
+      return JSON.parse(fs.readFileSync(filePath, "utf-8")) as T;
+    } catch {
+      return null;
     }
   }
   return null;
 }
 
-function ensureFile(filename: string) {
-  if (isVercel) {
-    const deployedPath = path.join(DEPLOYED_DATA_DIR, filename);
-    const writePath = path.join(DATA_DIR, filename);
-    if (!fs.existsSync(writePath) && fs.existsSync(deployedPath)) {
-      fs.copyFileSync(deployedPath, writePath);
-    }
-  }
+function writeToDisk<T>(filename: string, data: T) {
+  ensureDir(WRITE_DIR);
+  fs.writeFileSync(
+    path.join(WRITE_DIR, filename),
+    JSON.stringify(data, null, 2),
+    "utf-8"
+  );
 }
 
-function readJson<T>(filename: string, fallback: T): T {
-  ensureDir(DATA_DIR);
-  ensureFile(filename);
-  const raw = readFile(filename);
-  if (raw !== null) {
-    try {
-      return JSON.parse(raw) as T;
-    } catch {
-      return fallback;
-    }
-  }
-  writeJson(filename, fallback);
-  return fallback;
+const sourceData: Record<string, unknown> = {
+  [TOURNAMENTS_FILE]: sourceTournaments,
+  [TEAMS_FILE]: sourceTeams,
+  [MATCHES_FILE]: sourceMatches,
+  [RESULTS_FILE]: sourceRaceResults,
+};
+
+function readData<T>(filename: string): T[] {
+  const fromDisk = readFromDisk<T[]>(filename);
+  if (fromDisk !== null) return fromDisk;
+  if (isVercel) return sourceData[filename] as T[];
+  return [];
 }
 
-function writeJson<T>(filename: string, data: T) {
-  ensureDir(DATA_DIR);
-  const filePath = path.join(DATA_DIR, filename);
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+function writeData<T>(filename: string, data: T[]) {
+  writeToDisk(filename, data);
 }
 
 function getTournaments(): Tournament[] {
-  return readJson<Tournament[]>(TOURNAMENTS_FILE, []);
+  return readData<Tournament>(TOURNAMENTS_FILE);
 }
 
 function saveTournaments(data: Tournament[]) {
-  writeJson(TOURNAMENTS_FILE, data);
+  writeData(TOURNAMENTS_FILE, data);
 }
 
 function getTeams(): Team[] {
-  return readJson<Team[]>(TEAMS_FILE, []);
+  return readData<Team>(TEAMS_FILE);
 }
 
 function saveTeams(data: Team[]) {
-  writeJson(TEAMS_FILE, data);
+  writeData(TEAMS_FILE, data);
 }
 
 function getMatches(): Match[] {
-  return readJson<Match[]>(MATCHES_FILE, []);
+  return readData<Match>(MATCHES_FILE);
 }
 
 function saveMatches(data: Match[]) {
-  writeJson(MATCHES_FILE, data);
+  writeData(MATCHES_FILE, data);
+}
+
+function getResults(): RaceResult[] {
+  return readData<RaceResult>(RESULTS_FILE);
+}
+
+function saveResults(data: RaceResult[]) {
+  writeData(RESULTS_FILE, data);
 }
 
 export function listTournaments(): Tournament[] {
@@ -137,11 +135,7 @@ export function updateTournament(
   const all = getTournaments();
   const idx = all.findIndex((t) => t.id === id);
   if (idx === -1) return null;
-  all[idx] = {
-    ...all[idx],
-    ...data,
-    updatedAt: new Date().toISOString(),
-  };
+  all[idx] = { ...all[idx], ...data, updatedAt: new Date().toISOString() };
   saveTournaments(all);
   return all[idx];
 }
@@ -150,11 +144,8 @@ export function deleteTournament(id: string): boolean {
   const all = getTournaments().filter((t) => t.id !== id);
   if (all.length === getTournaments().length) return false;
   saveTournaments(all);
-
-  const teams = getTeams().filter((t) => t.tournamentId !== id);
-  saveTeams(teams);
-  const matches = getMatches().filter((m) => m.tournamentId !== id);
-  saveMatches(matches);
+  saveTeams(getTeams().filter((t) => t.tournamentId !== id));
+  saveMatches(getMatches().filter((m) => m.tournamentId !== id));
   return true;
 }
 
@@ -162,27 +153,16 @@ export function listTeams(tournamentId: string): Team[] {
   return getTeams().filter((t) => t.tournamentId === tournamentId);
 }
 
-export function createTeam(
-  tournamentId: string,
-  data: TeamFormData
-): Team {
+export function createTeam(tournamentId: string, data: TeamFormData): Team {
   const now = new Date().toISOString();
-  const team: Team = {
-    id: uuidv4(),
-    tournamentId,
-    ...data,
-    createdAt: now,
-  };
+  const team: Team = { id: uuidv4(), tournamentId, ...data, createdAt: now };
   const all = getTeams();
   all.push(team);
   saveTeams(all);
   return team;
 }
 
-export function updateTeam(
-  id: string,
-  data: Partial<TeamFormData>
-): Team | null {
+export function updateTeam(id: string, data: Partial<TeamFormData>): Team | null {
   const all = getTeams();
   const idx = all.findIndex((t) => t.id === id);
   if (idx === -1) return null;
@@ -204,10 +184,7 @@ export function listMatches(tournamentId: string): Match[] {
     .sort((a, b) => a.round - b.round || a.date.localeCompare(b.date));
 }
 
-export function createMatch(
-  tournamentId: string,
-  data: MatchFormData
-): Match {
+export function createMatch(tournamentId: string, data: MatchFormData): Match {
   const now = new Date().toISOString();
   const match: Match = {
     id: uuidv4(),
@@ -241,12 +218,7 @@ export function updateMatch(
   const all = getMatches();
   const idx = all.findIndex((m) => m.id === id);
   if (idx === -1) return null;
-  const updated: Match = {
-    ...all[idx],
-    ...data,
-    updatedAt: new Date().toISOString(),
-  };
-
+  const updated: Match = { ...all[idx], ...data, updatedAt: new Date().toISOString() };
   if (data.score1 !== undefined && data.score2 !== undefined) {
     updated.score1 = data.score1;
     updated.score2 = data.score2;
@@ -261,7 +233,6 @@ export function updateMatch(
       updated.status = "completed";
     }
   }
-
   all[idx] = updated;
   saveMatches(all);
   return all[idx];
@@ -274,14 +245,6 @@ export function deleteMatch(id: string): boolean {
   return true;
 }
 
-function getResults(): RaceResult[] {
-  return readJson<RaceResult[]>(RESULTS_FILE, []);
-}
-
-function saveResults(data: RaceResult[]) {
-  writeJson(RESULTS_FILE, data);
-}
-
 export function listRaceResults(tournamentId: string): RaceResult[] {
   return getResults().filter((r) => r.tournamentId === tournamentId);
 }
@@ -292,10 +255,8 @@ export function createRaceResult(
 ): RaceResult {
   const now = new Date().toISOString();
   const computedFromPositions = data.positions
-    ? data.positions.reduce(
-        (sum, pos) => sum + (PUNTOS_POR_POSICION[pos] || 0),
-        0
-      ) + data.repickCount * PENALIZACIONES.repickPista.puntos
+    ? data.positions.reduce((sum, pos) => sum + (PUNTOS_POR_POSICION[pos] || 0), 0) +
+      data.repickCount * PENALIZACIONES.repickPista.puntos
     : 0;
   const result: RaceResult = {
     id: uuidv4(),
@@ -318,10 +279,8 @@ export function createRaceResult(
 export function getPlayerStandings(tournamentId: string): PlayerStanding[] {
   const teams = listTeams(tournamentId);
   const results = listRaceResults(tournamentId);
-  const teamMap = new Map(teams.map((t) => [t.id, t]));
 
   const playerMap = new Map<string, PlayerStanding>();
-
   for (const team of teams) {
     playerMap.set(team.id, {
       playerId: team.id,
@@ -336,7 +295,6 @@ export function getPlayerStandings(tournamentId: string): PlayerStanding[] {
   }
 
   const rounds = [...new Set(results.map((r) => r.round))].sort();
-
   for (const round of rounds) {
     const roundResults = results.filter((r) => r.round === round);
     const groups = [...new Set(roundResults.map((r) => r.group || "1"))].sort();
@@ -348,13 +306,7 @@ export function getPlayerStandings(tournamentId: string): PlayerStanding[] {
         const player = playerMap.get(r.playerId);
         if (!player) return;
         const posPts = PUNTOS_POR_POSICION[idx + 1] || 0;
-        player.rounds.push({
-          round: r.round,
-          points: posPts,
-          repickCount: 0,
-          group,
-          groupPosition: idx + 1,
-        });
+        player.rounds.push({ round: r.round, points: posPts, repickCount: 0, group, groupPosition: idx + 1 });
         player.totalPoints += posPts;
       });
     }
@@ -365,72 +317,38 @@ export function getPlayerStandings(tournamentId: string): PlayerStanding[] {
     player.rounds.sort((a, b) => a.round - b.round);
   }
 
-  const standings = Array.from(playerMap.values());
-  standings.sort(
+  return Array.from(playerMap.values()).sort(
     (a, b) => b.finalPoints - a.finalPoints || b.totalPoints - a.totalPoints
   );
-
-  return standings;
 }
 
 export function getStandings(tournamentId: string): Standing[] {
   const teams = listTeams(tournamentId);
-  const matches = listMatches(tournamentId).filter(
-    (m) => m.status === "completed"
-  );
-  const teamMap = new Map(teams.map((t) => [t.id, t]));
+  const matches = listMatches(tournamentId).filter((m) => m.status === "completed");
 
-  const stats = new Map<
-    string,
-    {
-      played: number;
-      won: number;
-      drawn: number;
-      lost: number;
-      goalsFor: number;
-      goalsAgainst: number;
-    }
-  >();
-
+  const stats = new Map<string, { played: number; won: number; drawn: number; lost: number; goalsFor: number; goalsAgainst: number }>();
   for (const team of teams) {
-    stats.set(team.id, {
-      played: 0,
-      won: 0,
-      drawn: 0,
-      lost: 0,
-      goalsFor: 0,
-      goalsAgainst: 0,
-    });
+    stats.set(team.id, { played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0 });
   }
 
   for (const match of matches) {
     const s1 = stats.get(match.team1Id);
     const s2 = stats.get(match.team2Id);
-    if (!s1 || !s2 || match.score1 === null || match.score2 === null)
-      continue;
-
+    if (!s1 || !s2 || match.score1 === null || match.score2 === null) continue;
     s1.played++;
     s2.played++;
     s1.goalsFor += match.score1;
     s1.goalsAgainst += match.score2;
     s2.goalsFor += match.score2;
     s2.goalsAgainst += match.score1;
-
-    if (match.score1 > match.score2) {
-      s1.won++;
-      s2.lost++;
-    } else if (match.score2 > match.score1) {
-      s2.won++;
-      s1.lost++;
-    } else {
-      s1.drawn++;
-      s2.drawn++;
-    }
+    if (match.score1 > match.score2) { s1.won++; s2.lost++; }
+    else if (match.score2 > match.score1) { s2.won++; s1.lost++; }
+    else { s1.drawn++; s2.drawn++; }
   }
 
   const standings: Standing[] = [];
   for (const [teamId, s] of stats) {
-    const team = teamMap.get(teamId);
+    const team = teams.find((t) => t.id === teamId);
     if (!team) continue;
     standings.push({
       teamId,
@@ -448,9 +366,6 @@ export function getStandings(tournamentId: string): Standing[] {
     });
   }
 
-  standings.sort(
-    (a, b) => b.points - a.points || b.goalDiff - a.goalDiff || b.goalsFor - a.goalsFor
-  );
-
+  standings.sort((a, b) => b.points - a.points || b.goalDiff - a.goalDiff || b.goalsFor - a.goalsFor);
   return standings;
 }
