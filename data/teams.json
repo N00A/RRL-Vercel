@@ -15,5 +15,5 @@
   { "id": "rrl14", "tournamentId": "t3", "name": "pau:33RRL", "shortName": "PAU", "color": "#0EA5E9", "createdAt": "2026-05-20T00:00:00Z" },
   { "id": "rrl15", "tournamentId": "t3", "name": "RafaHoly", "shortName": "RHF", "color": "#84CC16", "createdAt": "2026-05-20T00:00:00Z" },
   { "id": "rrl16", "tournamentId": "t3", "name": "Samuel", "shortName": "SAM", "color": "#F43F5E", "createdAt": "2026-05-20T00:00:00Z" },
-  { "id": "rrl17", "tournamentId": "t3", "name": "VicSabo", "shortName": "VIC", "color": "#2DD4BF", "createdAt": "2026-05-20T00:00:00Z" }
+  { "id": "rrl17", "tournamentId": "t3", "name": "CUBIO", "shortName": "CUB", "color": "#2DD4BF", "createdAt": "2026-05-20T00:00:00Z" }
 ]
