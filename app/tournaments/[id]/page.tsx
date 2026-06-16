@@ -6,6 +6,7 @@ import { LEAGUE_CONFIG, PUNTOS_POR_POSICION, PENALIZACIONES } from "@/constants/
 import DivisionRules from "@/components/DivisionRules";
 import TournamentTimeline from "@/components/TournamentTimeline";
 import RoomRules from "@/components/RoomRules";
+import GroupRandomizer from "@/components/GroupRandomizer";
 
 export default function TournamentDetailPage({
   params,
@@ -137,6 +138,7 @@ export default function TournamentDetailPage({
             />
           )}
           {isMK8 && <RoomRules />}
+          {isMK8 && <GroupRandomizer players={players} />}
         </div>
       )}
 
