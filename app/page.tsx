@@ -34,6 +34,21 @@ export default function Home() {
         </div>
       </div>
 
+      <div className="mb-8 bg-gradient-to-r from-purple-900/40 to-blue-900/40 rounded-xl shadow-lg border border-purple-500/30 p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="font-bold text-lg">Mario Kart Mundial 2026</h2>
+            <p className="text-white/60 text-sm">48 selecciones — Fase de grupos</p>
+          </div>
+          <Link
+            href="/mundial"
+            className="bg-rojo hover:bg-rojo/80 text-white text-sm px-4 py-2 rounded-lg transition"
+          >
+            Ver Mundial
+          </Link>
+        </div>
+      </div>
+
       <h2 className="text-xl font-semibold mb-4">Torneos Recientes</h2>
       {tournaments.length === 0 ? (
         <div className="bg-navy-light rounded-xl shadow-lg border border-white/10 p-8 text-center text-white/40">

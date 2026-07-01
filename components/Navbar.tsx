@@ -19,6 +19,9 @@ export default function Navbar() {
           </div>
         </Link>
         <div className="flex gap-4 text-sm">
+          <Link href="/mundial" className="hover:text-dorado transition">
+            Mundial 2026
+          </Link>
           <Link href="/tournaments" className="hover:text-dorado transition">
             Torneos
           </Link>

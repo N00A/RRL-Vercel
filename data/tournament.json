@@ -1,0 +1,680 @@
+{
+  "phase": "GROUPS",
+  "groups": [
+    {
+      "groupId": "A",
+      "players": [
+        {
+          "id": "mexico",
+          "name": "Mexico (BOT)",
+          "groupId": "A",
+          "botCount": 1
+        },
+        {
+          "id": "sudafrica",
+          "name": "Sudafrica (Marcelo)",
+          "groupId": "A",
+          "botCount": 1
+        },
+        {
+          "id": "corea-del-sur",
+          "name": "Corea del Sur (Changa)",
+          "groupId": "A",
+          "botCount": 1
+        },
+        {
+          "id": "republica-checa",
+          "name": "Republica Checa (Paula Rojas)",
+          "groupId": "A",
+          "botCount": 1
+        }
+      ],
+      "races": [],
+      "penalties": [],
+      "date": "2026-07-01T20:00:00"
+    },
+    {
+      "groupId": "B",
+      "players": [
+        {
+          "id": "canada",
+          "name": "Canada (BOT)",
+          "groupId": "B",
+          "botCount": 2
+        },
+        {
+          "id": "bosnia",
+          "name": "Bosnia y Herzegovina (Santiago Solorza)",
+          "groupId": "B",
+          "botCount": 2
+        },
+        {
+          "id": "catar",
+          "name": "Catar (BOT)",
+          "groupId": "B",
+          "botCount": 2
+        },
+        {
+          "id": "suiza",
+          "name": "Suiza (Luis Miguel Tremont)",
+          "groupId": "B",
+          "botCount": 2
+        }
+      ],
+      "races": [],
+      "penalties": [],
+      "date": "2026-07-01T20:00:00"
+    },
+    {
+      "groupId": "C",
+      "players": [
+        {
+          "id": "brasil",
+          "name": "Brasil (BOT)",
+          "groupId": "C",
+          "botCount": 1
+        },
+        {
+          "id": "marruecos",
+          "name": "Marruecos (Carlos)",
+          "groupId": "C",
+          "botCount": 1
+        },
+        {
+          "id": "haiti",
+          "name": "Haiti (Santiago Villa)",
+          "groupId": "C",
+          "botCount": 1
+        },
+        {
+          "id": "escocia",
+          "name": "Escocia (Juan Jose Beltran)",
+          "groupId": "C",
+          "botCount": 1
+        }
+      ],
+      "races": [],
+      "penalties": [],
+      "date": "2026-07-01T20:00:00"
+    },
+    {
+      "groupId": "D",
+      "players": [
+        {
+          "id": "usa",
+          "name": "Estados Unidos (Carlos Rivera)",
+          "groupId": "D",
+          "botCount": 1
+        },
+        {
+          "id": "paraguay",
+          "name": "Paraguay (BOT)",
+          "groupId": "D",
+          "botCount": 1
+        },
+        {
+          "id": "australia",
+          "name": "Australia (Manuel San RL)",
+          "groupId": "D",
+          "botCount": 1
+        },
+        {
+          "id": "turquia",
+          "name": "Turquia (+57 320 5393020)",
+          "groupId": "D",
+          "botCount": 1
+        }
+      ],
+      "races": [],
+      "penalties": [],
+      "date": "2026-07-01T20:00:00"
+    },
+    {
+      "groupId": "E",
+      "players": [
+        {
+          "id": "alemania",
+          "name": "Alemania (BOT)",
+          "groupId": "E",
+          "botCount": 1
+        },
+        {
+          "id": "curazao",
+          "name": "Curazao (ShanksFP)",
+          "groupId": "E",
+          "botCount": 1
+        },
+        {
+          "id": "costa-de-marfil",
+          "name": "Costa de Marfil (Lucas)",
+          "groupId": "E",
+          "botCount": 1
+        },
+        {
+          "id": "ecuador",
+          "name": "Ecuador (Jose David)",
+          "groupId": "E",
+          "botCount": 1
+        }
+      ],
+      "races": [],
+      "penalties": [],
+      "date": "2026-07-02T20:00:00"
+    },
+    {
+      "groupId": "F",
+      "players": [
+        {
+          "id": "paises-bajos",
+          "name": "Paises Bajos (BOT)",
+          "groupId": "F",
+          "botCount": 2
+        },
+        {
+          "id": "japon",
+          "name": "Japon (Cris)",
+          "groupId": "F",
+          "botCount": 2
+        },
+        {
+          "id": "suecia",
+          "name": "Rockman X",
+          "groupId": "F",
+          "botCount": 2
+        },
+        {
+          "id": "tunez",
+          "name": "Tunez (Dr Luigi)",
+          "groupId": "F",
+          "botCount": 2
+        }
+      ],
+      "races": [],
+      "penalties": [],
+      "date": "2026-07-02T20:00:00"
+    },
+    {
+      "groupId": "G",
+      "players": [
+        {
+          "id": "belgica",
+          "name": "Belgica (BOT)",
+          "groupId": "G",
+          "botCount": 2
+        },
+        {
+          "id": "egipto",
+          "name": "Egipto (Moicha)",
+          "groupId": "G",
+          "botCount": 2
+        },
+        {
+          "id": "iran",
+          "name": "Iran (Alejandro Campos)",
+          "groupId": "G",
+          "botCount": 2
+        },
+        {
+          "id": "nz",
+          "name": "Nueva Zelanda (BOT)",
+          "groupId": "G",
+          "botCount": 2
+        }
+      ],
+      "races": [],
+      "penalties": [],
+      "date": "2026-07-02T20:00:00"
+    },
+    {
+      "groupId": "H",
+      "players": [
+        {
+          "id": "espana",
+          "name": "Espana (BOT)",
+          "groupId": "H",
+          "botCount": 2
+        },
+        {
+          "id": "cabo-verde",
+          "name": "Cabo Verde (Geto)",
+          "groupId": "H",
+          "botCount": 2
+        },
+        {
+          "id": "arabia-saudita",
+          "name": "Arabia Saudita (BOT)",
+          "groupId": "H",
+          "botCount": 2
+        },
+        {
+          "id": "uruguay",
+          "name": "Uruguay (Manuel Alejandro Rodriguez)",
+          "groupId": "H",
+          "botCount": 2
+        }
+      ],
+      "races": [],
+      "penalties": [],
+      "date": "2026-07-02T20:00:00"
+    },
+    {
+      "groupId": "I",
+      "players": [
+        {
+          "id": "francia",
+          "name": "Francia (BOT)",
+          "groupId": "I",
+          "botCount": 1
+        },
+        {
+          "id": "senegal",
+          "name": "Senegal (Rafael Largacha O)",
+          "groupId": "I",
+          "botCount": 1
+        },
+        {
+          "id": "irak",
+          "name": "Irak (Victor Sabogal)",
+          "groupId": "I",
+          "botCount": 1
+        },
+        {
+          "id": "noruega",
+          "name": "Noruega (Juan Gonzalez C)",
+          "groupId": "I",
+          "botCount": 1
+        }
+      ],
+      "races": [],
+      "penalties": [],
+      "date": "2026-07-06T20:00:00"
+    },
+    {
+      "groupId": "J",
+      "players": [
+        {
+          "id": "argentina",
+          "name": "Argentina (Samuel Herrera)",
+          "groupId": "J",
+          "botCount": 2
+        },
+        {
+          "id": "argelia",
+          "name": "Argelia (BOT)",
+          "groupId": "J",
+          "botCount": 2
+        },
+        {
+          "id": "austria",
+          "name": "Austria (Irukandgy)",
+          "groupId": "J",
+          "botCount": 2
+        },
+        {
+          "id": "jordania",
+          "name": "Jordania (BOT)",
+          "groupId": "J",
+          "botCount": 2
+        }
+      ],
+      "races": [],
+      "penalties": [],
+      "date": "2026-07-06T20:00:00"
+    },
+    {
+      "groupId": "K",
+      "players": [
+        {
+          "id": "portugal",
+          "name": "Portugal (Mr Panda)",
+          "groupId": "K",
+          "botCount": 1
+        },
+        {
+          "id": "rd-congo",
+          "name": "Republica Democratica del Congo (Daevid Julian)",
+          "groupId": "K",
+          "botCount": 1
+        },
+        {
+          "id": "uzbekistan",
+          "name": "Uzbekistan (BOT)",
+          "groupId": "K",
+          "botCount": 1
+        },
+        {
+          "id": "colombia",
+          "name": "Colombia (Catalina Garcia Cubillos)",
+          "groupId": "K",
+          "botCount": 1
+        }
+      ],
+      "races": [],
+      "penalties": [],
+      "date": "2026-07-06T20:00:00"
+    },
+    {
+      "groupId": "L",
+      "players": [
+        {
+          "id": "inglaterra",
+          "name": "Inglaterra (Ayteg)",
+          "groupId": "L",
+          "botCount": 2
+        },
+        {
+          "id": "croacia",
+          "name": "Croacia (BOT)",
+          "groupId": "L",
+          "botCount": 2
+        },
+        {
+          "id": "ghana",
+          "name": "Ghana (Legendsito Nintenderos)",
+          "groupId": "L",
+          "botCount": 2
+        },
+        {
+          "id": "panama",
+          "name": " Panama Esteban Campos",
+          "groupId": "L",
+          "botCount": 2
+        }
+      ],
+      "races": [],
+      "penalties": [],
+      "date": "2026-07-06T20:00:00"
+    }
+  ],
+  "eliminationRooms": [],
+  "players": [
+    {
+      "id": "mexico",
+      "name": "Mexico (BOT)",
+      "groupId": "A",
+      "botCount": 1
+    },
+    {
+      "id": "sudafrica",
+      "name": "Sudafrica (Marcelo)",
+      "groupId": "A",
+      "botCount": 1
+    },
+    {
+      "id": "corea-del-sur",
+      "name": "Corea del Sur (Changa)",
+      "groupId": "A",
+      "botCount": 1
+    },
+    {
+      "id": "republica-checa",
+      "name": "Republica Checa (Paula Rojas)",
+      "groupId": "A",
+      "botCount": 1
+    },
+    {
+      "id": "canada",
+      "name": "Canada (BOT)",
+      "groupId": "B",
+      "botCount": 2
+    },
+    {
+      "id": "bosnia",
+      "name": "Bosnia y Herzegovina (Santiago Solorza)",
+      "groupId": "B",
+      "botCount": 2
+    },
+    {
+      "id": "catar",
+      "name": "Catar (BOT)",
+      "groupId": "B",
+      "botCount": 2
+    },
+    {
+      "id": "suiza",
+      "name": "Suiza (Luis Miguel Tremont)",
+      "groupId": "B",
+      "botCount": 2
+    },
+    {
+      "id": "brasil",
+      "name": "Brasil (BOT)",
+      "groupId": "C",
+      "botCount": 1
+    },
+    {
+      "id": "marruecos",
+      "name": "Marruecos (Carlos)",
+      "groupId": "C",
+      "botCount": 1
+    },
+    {
+      "id": "haiti",
+      "name": "Haiti (Santiago Villa)",
+      "groupId": "C",
+      "botCount": 1
+    },
+    {
+      "id": "escocia",
+      "name": "Escocia (Juan Jose Beltran)",
+      "groupId": "C",
+      "botCount": 1
+    },
+    {
+      "id": "usa",
+      "name": "Estados Unidos (Carlos Rivera)",
+      "groupId": "D",
+      "botCount": 1
+    },
+    {
+      "id": "paraguay",
+      "name": "Paraguay (BOT)",
+      "groupId": "D",
+      "botCount": 1
+    },
+    {
+      "id": "australia",
+      "name": "Australia (Manuel San RL)",
+      "groupId": "D",
+      "botCount": 1
+    },
+    {
+      "id": "turquia",
+      "name": "Turquia (+57 320 5393020)",
+      "groupId": "D",
+      "botCount": 1
+    },
+    {
+      "id": "alemania",
+      "name": "Alemania (BOT)",
+      "groupId": "E",
+      "botCount": 1
+    },
+    {
+      "id": "curazao",
+      "name": "Curazao (ShanksFP)",
+      "groupId": "E",
+      "botCount": 1
+    },
+    {
+      "id": "costa-de-marfil",
+      "name": "Costa de Marfil (Lucas)",
+      "groupId": "E",
+      "botCount": 1
+    },
+    {
+      "id": "ecuador",
+      "name": "Ecuador (Jose David)",
+      "groupId": "E",
+      "botCount": 1
+    },
+    {
+      "id": "paises-bajos",
+      "name": "Paises Bajos (BOT)",
+      "groupId": "F",
+      "botCount": 2
+    },
+    {
+      "id": "japon",
+      "name": "Japon (Cris)",
+      "groupId": "F",
+      "botCount": 2
+    },
+    {
+      "id": "suecia",
+      "name": "Suecia (Rockman X)",
+      "groupId": "F",
+      "botCount": 2
+    },
+    {
+      "id": "tunez",
+      "name": "Tunez (Dr Luigi)",
+      "groupId": "F",
+      "botCount": 2
+    },
+    {
+      "id": "belgica",
+      "name": "Belgica (BOT)",
+      "groupId": "G",
+      "botCount": 2
+    },
+    {
+      "id": "egipto",
+      "name": "Egipto (Moicha)",
+      "groupId": "G",
+      "botCount": 2
+    },
+    {
+      "id": "iran",
+      "name": "Iran (Alejandro Campos)",
+      "groupId": "G",
+      "botCount": 2
+    },
+    {
+      "id": "nz",
+      "name": "Nueva Zelanda (BOT)",
+      "groupId": "G",
+      "botCount": 2
+    },
+    {
+      "id": "espana",
+      "name": "Espana (BOT)",
+      "groupId": "H",
+      "botCount": 2
+    },
+    {
+      "id": "cabo-verde",
+      "name": "Cabo Verde (Geto)",
+      "groupId": "H",
+      "botCount": 2
+    },
+    {
+      "id": "arabia-saudita",
+      "name": "Arabia Saudita (BOT)",
+      "groupId": "H",
+      "botCount": 2
+    },
+    {
+      "id": "uruguay",
+      "name": "Uruguay (Manuel Alejandro Rodriguez)",
+      "groupId": "H",
+      "botCount": 2
+    },
+    {
+      "id": "francia",
+      "name": "Francia (BOT)",
+      "groupId": "I",
+      "botCount": 1
+    },
+    {
+      "id": "senegal",
+      "name": "Senegal (Rafael Largacha O)",
+      "groupId": "I",
+      "botCount": 1
+    },
+    {
+      "id": "irak",
+      "name": "Irak (Victor Sabogal)",
+      "groupId": "I",
+      "botCount": 1
+    },
+    {
+      "id": "noruega",
+      "name": "Noruega (Juan Gonzalez C)",
+      "groupId": "I",
+      "botCount": 1
+    },
+    {
+      "id": "argentina",
+      "name": "Argentina (Samuel Herrera)",
+      "groupId": "J",
+      "botCount": 2
+    },
+    {
+      "id": "argelia",
+      "name": "Argelia (BOT)",
+      "groupId": "J",
+      "botCount": 2
+    },
+    {
+      "id": "austria",
+      "name": "Austria (Irukandgy)",
+      "groupId": "J",
+      "botCount": 2
+    },
+    {
+      "id": "jordania",
+      "name": "Jordania (BOT)",
+      "groupId": "J",
+      "botCount": 2
+    },
+    {
+      "id": "portugal",
+      "name": "Portugal (Mr Panda)",
+      "groupId": "K",
+      "botCount": 1
+    },
+    {
+      "id": "rd-congo",
+      "name": "Republica Democratica del Congo (Daevid Julian)",
+      "groupId": "K",
+      "botCount": 1
+    },
+    {
+      "id": "uzbekistan",
+      "name": "Uzbekistan (BOT)",
+      "groupId": "K",
+      "botCount": 1
+    },
+    {
+      "id": "colombia",
+      "name": "Colombia (Catalina Garcia Cubillos)",
+      "groupId": "K",
+      "botCount": 1
+    },
+    {
+      "id": "inglaterra",
+      "name": "Inglaterra (Ayteg)",
+      "groupId": "L",
+      "botCount": 1
+    },
+    {
+      "id": "croacia",
+      "name": "Croacia (BOT)",
+      "groupId": "L",
+      "botCount": 1
+    },
+    {
+      "id": "ghana",
+      "name": "Ghana (Legendsito Nintenderos)",
+      "groupId": "L",
+      "botCount": 1
+    },
+    {
+      "id": "panama",
+      "name": "Panama (Esteban Campos)",
+      "groupId": "L",
+      "botCount": 1
+    }
+  ]
+}
