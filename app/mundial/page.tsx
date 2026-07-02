@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import type { TournamentState, GroupStage, EliminationRoom } from "@/types/tournament";
 
+type TopScorer = { playerId: string; totalMkPoints: number };
+
 const PHASE_LABELS: Record<string, string> = {
   GROUPS: "Fase de Grupos",
   R16: "Dieciseisavos",
@@ -36,6 +38,7 @@ function formatFecha(iso: string): string {
 
 export default function MundialPage() {
   const [state, setState] = useState<TournamentState | null>(null);
+  const [topScorers, setTopScorers] = useState<TopScorer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -47,6 +50,7 @@ export default function MundialPage() {
       })
       .then((data) => {
         setState(data);
+        setTopScorers(data.topScorers ?? []);
         setLoading(false);
       })
       .catch((e) => {
@@ -83,6 +87,12 @@ export default function MundialPage() {
         )}
       </div>
 
+      {topScorers.length > 0 && (
+        <div className="mb-6">
+          <GoleadoresView scorers={topScorers} players={state.players} />
+        </div>
+      )}
+
       {state.phase === "GROUPS" && (
         <>
           <GroupsView groups={state.groups} />
@@ -97,19 +107,33 @@ export default function MundialPage() {
 }
 
 function GroupsView({ groups }: { groups: GroupStage[] }) {
-  const jornadas = [
-    { label: "Miercoles 1 de Julio — 8:00 PM", grupos: groups.filter(g => ["A","B","C","D"].includes(g.groupId)) },
-    { label: "Jueves 2 de Julio — 8:00 PM", grupos: groups.filter(g => ["E","F","G","H"].includes(g.groupId)) },
-    { label: "Lunes 6 de Julio — 8:00 PM", grupos: groups.filter(g => ["I","J","K","L"].includes(g.groupId)) },
-  ];
+  const grouped = new Map<string, GroupStage[]>();
+  for (const g of groups) {
+    const key = g.date;
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key)!.push(g);
+  }
+
+  const dateLabels: Record<string, string> = {
+    "2026-07-01T20:00:00": "Miercoles 1 de Julio — 8:00 PM",
+    "2026-07-02T20:00:00": "Jueves 2 de Julio — 8:00 PM",
+    "2026-07-08T20:00:00": "Miercoles 8 de Julio — 8:00 PM",
+  };
+  const postponedDates = new Set(["2026-07-08T20:00:00"]);
 
   return (
     <div className="space-y-8">
-      {jornadas.map((j) => (
-        <div key={j.label}>
-          <h3 className="text-sm font-semibold text-dorado mb-3 uppercase tracking-wide">{j.label}</h3>
+      {[...grouped.entries()]
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([date, grupos]) => {
+          const isPostponed = postponedDates.has(date);
+          return (
+        <div key={date}>
+          <h3 className="text-sm font-semibold text-dorado mb-3 uppercase tracking-wide">
+            {dateLabels[date] ?? formatFecha(date)}
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {j.grupos.map((group) => {
+            {grupos.map((group) => {
               const closed = !!group.finalRanking;
               const color = group.groupId.charCodeAt(0) % 2 === 0 ? "border-blue-500/30" : "border-purple-500/30";
               return (
@@ -150,7 +174,8 @@ function GroupsView({ groups }: { groups: GroupStage[] }) {
             })}
           </div>
         </div>
-      ))}
+      );
+      })}
     </div>
   );
 }
@@ -298,6 +323,43 @@ function RoomCard({ room, players }: { room: EliminationRoom; players: Tournamen
       {room.penalties && room.penalties.length > 0 && (
         <div className="mt-2 text-xs text-rojo">Penalizaciones: {room.penalties.length}</div>
       )}
+    </div>
+  );
+}
+
+function GoleadoresView({ scorers, players }: { scorers: TopScorer[]; players: TournamentState["players"] }) {
+  const top10 = scorers.slice(0, 5);
+  return (
+    <div className="bg-navy-light rounded-xl shadow-lg border border-dorado/30 p-5">
+      <h3 className="font-semibold mb-3 flex items-center gap-2">
+        <span className="text-dorado">Goleadores</span>
+        <span className="text-xs text-white/40 font-normal">Top acumulado de puntos MK</span>
+      </h3>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-white/40 text-xs border-b border-white/10">
+              <th className="text-left py-2 pr-2">#</th>
+              <th className="text-left py-2 pr-2">Jugador</th>
+              <th className="text-right py-2">Puntos MK</th>
+            </tr>
+          </thead>
+          <tbody>
+            {top10.map((s, i) => {
+              const p = players.find(pl => pl.id === s.playerId);
+              return (
+                <tr key={s.playerId} className="border-b border-white/5 hover:bg-white/5">
+                  <td className={`py-2 pr-2 font-bold text-xs ${i === 0 ? "text-dorado" : i < 3 ? "text-white/80" : "text-white/40"}`}>
+                    {i + 1}
+                  </td>
+                  <td className="py-2 pr-2 break-words">{p ? p.name.replace(" (BOT)", "") : s.playerId}</td>
+                  <td className="py-2 text-right font-mono text-dorado">{s.totalMkPoints}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

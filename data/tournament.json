@@ -31,7 +31,7 @@
       ],
       "races": [],
       "penalties": [],
-      "date": "2026-07-01T20:00:00"
+      "date": "2026-07-08T20:00:00"
     },
     {
       "groupId": "B",
@@ -63,7 +63,7 @@
       ],
       "races": [],
       "penalties": [],
-      "date": "2026-07-01T20:00:00"
+      "date": "2026-07-08T20:00:00"
     },
     {
       "groupId": "C",
@@ -95,6 +95,12 @@
       ],
       "races": [],
       "penalties": [],
+      "finalRanking": [
+        { "playerId": "haiti", "position": 1, "totalMkPoints": 158, "groupPoints": 9 },
+        { "playerId": "escocia", "position": 2, "totalMkPoints": 155, "groupPoints": 6 },
+        { "playerId": "brasil", "position": 3, "totalMkPoints": 120, "groupPoints": 3 },
+        { "playerId": "marruecos", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+      ],
       "date": "2026-07-01T20:00:00"
     },
     {
@@ -127,6 +133,12 @@
       ],
       "races": [],
       "penalties": [],
+      "finalRanking": [
+        { "playerId": "australia", "position": 1, "totalMkPoints": 180, "groupPoints": 9 },
+        { "playerId": "paraguay", "position": 2, "totalMkPoints": 144, "groupPoints": 6 },
+        { "playerId": "usa", "position": 3, "totalMkPoints": 0, "groupPoints": 0 },
+        { "playerId": "turquia", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+      ],
       "date": "2026-07-01T20:00:00"
     },
     {
@@ -178,7 +190,7 @@
         },
         {
           "id": "suecia",
-          "name": "Rockman X",
+          "name": "Suecia (Rockman X)",
           "groupId": "F",
           "botCount": 2
         },

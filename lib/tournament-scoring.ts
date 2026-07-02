@@ -132,6 +132,43 @@ export function resolveRoom(room: EliminationRoom): {
   return { winners, eliminated, podium };
 }
 
+export function computeTopScorers(state: TournamentState): { playerId: string; totalMkPoints: number }[] {
+  const totals = new Map<string, number>();
+
+  for (const group of state.groups) {
+    if (group.finalRanking && group.races.length === 0) {
+      for (const r of group.finalRanking) {
+        const current = totals.get(r.playerId) ?? 0;
+        totals.set(r.playerId, current + r.totalMkPoints);
+      }
+    }
+    for (const race of group.races) {
+      for (const pos of race.positions) {
+        if (pos.lateEntry) continue;
+        const current = totals.get(pos.playerId) ?? 0;
+        totals.set(pos.playerId, current + pos.mkPoints);
+      }
+    }
+    const penalties = group.penalties ?? [];
+    for (const p of penalties) {
+      const current = totals.get(p.playerId) ?? 0;
+      totals.set(p.playerId, current + p.amount);
+    }
+  }
+
+  for (const room of state.eliminationRooms) {
+    const penalties = room.penalties ?? [];
+    for (const p of penalties) {
+      const current = totals.get(p.playerId) ?? 0;
+      totals.set(p.playerId, current + p.amount);
+    }
+  }
+
+  return [...totals.entries()]
+    .map(([playerId, totalMkPoints]) => ({ playerId, totalMkPoints }))
+    .sort((a, b) => b.totalMkPoints - a.totalMkPoints);
+}
+
 export function applyRepickPenalty(
   state: TournamentState,
   playerId: string,
