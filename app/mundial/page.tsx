@@ -124,10 +124,19 @@ function computeR16Pairings(state: TournamentState): BracketPairing[] {
   return rooms;
 }
 
+type TabKey = "grupos" | "dieciseisavos" | "octavos" | "cuartos" | "semifinal";
+
+const PHASE_ROOMS: Record<string, { rooms: number; advance: number; phase: string; date: string; dateLabel: string }> = {
+  dieciseisavos: { rooms: 8, advance: 16, phase: "R16", date: "2026-07-11", dateLabel: "Sabado 11 de Julio" },
+  octavos: { rooms: 4, advance: 8, phase: "QF", date: "2026-07-12", dateLabel: "Domingo 12 de Julio" },
+  cuartos: { rooms: 2, advance: 4, phase: "SF", date: "2026-07-18", dateLabel: "Sabado 18 de Julio" },
+  semifinal: { rooms: 1, advance: 0, phase: "F", date: "2026-07-19", dateLabel: "Domingo 19 de Julio" },
+};
+
 export default function MundialPage() {
   const [state, setState] = useState<TournamentState | null>(null);
   const [topScorers, setTopScorers] = useState<TopScorer[]>([]);
-  const [tab, setTab] = useState<"grupos" | "dieciseisavos">("grupos");
+  const [tab, setTab] = useState<TabKey>("grupos");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -168,10 +177,16 @@ export default function MundialPage() {
   if (error) return <div className="text-center py-12 text-rojo">{error}</div>;
   if (!state) return <div className="text-center py-12 text-white/40">Sin datos</div>;
 
-  const tabs = [
-    { key: "grupos" as const, label: "Grupos" },
-    { key: "dieciseisavos" as const, label: "16vos" },
+  const tabs: { key: TabKey; label: string }[] = [
+    { key: "grupos", label: "Grupos" },
+    { key: "dieciseisavos", label: "16vos" },
+    { key: "octavos", label: "8vos" },
+    { key: "cuartos", label: "4tos" },
+    { key: "semifinal", label: "Semis/Final" },
   ];
+
+  const phaseRooms = (phaseCode: string) =>
+    state.eliminationRooms.filter(r => r.phase === phaseCode);
 
   return (
     <div>
@@ -206,12 +221,12 @@ export default function MundialPage() {
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex gap-1 mb-6 border-b border-white/10">
+      <div className="flex gap-1 mb-6 border-b border-white/10 overflow-x-auto">
         {tabs.map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`px-4 py-2 text-sm font-medium transition-colors rounded-t-lg ${
+            className={`px-4 py-2 text-sm font-medium transition-colors rounded-t-lg shrink-0 ${
               tab === t.key
                 ? "bg-navy-light text-white border-b-2 border-rojo"
                 : "text-white/40 hover:text-white/60"
@@ -243,7 +258,18 @@ export default function MundialPage() {
           r16Pairings={r16Pairings}
           players={state.players}
           bestThirds={rankedClientBestThirds}
-          eliminationRooms={state.eliminationRooms.filter(r => r.phase === "R16")}
+          eliminationRooms={phaseRooms("R16")}
+          dateLabel={PHASE_ROOMS.dieciseisavos.dateLabel}
+        />
+      )}
+
+      {["octavos", "cuartos", "semifinal"].includes(tab) && (
+        <PhaseView
+          state={state}
+          tabKey={tab}
+          phaseInfo={PHASE_ROOMS[tab]}
+          eliminationRooms={phaseRooms(PHASE_ROOMS[tab].phase)}
+          players={state.players}
         />
       )}
     </div>
@@ -256,12 +282,14 @@ function R16View({
   players,
   bestThirds,
   eliminationRooms,
+  dateLabel,
 }: {
   state: TournamentState;
   r16Pairings: BracketPairing[];
   players: TournamentState["players"];
   bestThirds: BestThird[];
   eliminationRooms: EliminationRoom[];
+  dateLabel: string;
 }) {
   const closed = state.groups.filter(g => g.finalRanking).length;
   const allClosed = closed === 12;
@@ -269,7 +297,10 @@ function R16View({
   if (eliminationRooms.length > 0) {
     return (
       <div>
-        <h3 className="font-semibold text-lg mb-4">Dieciseisavos de Final — Salas</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-semibold text-lg">Dieciseisavos de Final — Salas</h3>
+          <span className="text-xs text-dorado">{dateLabel}</span>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {eliminationRooms.map(room => (
             <R16RoomCard key={room.roomId} room={room} players={players} />
@@ -291,6 +322,7 @@ function R16View({
               {closed}/{totalSlots} grupos cerrados · 8 salas · 2 llaves por sala
             </p>
           </div>
+          <span className="text-xs text-dorado">{dateLabel}</span>
           <div className="flex items-center gap-1.5">
             {state.groups.map(g => (
               <span
@@ -373,6 +405,152 @@ function R16RoomCard({ room, players }: { room: EliminationRoom; players: Tourna
             <span key={p.playerId}>{p.position}° {playerName(players.find(pl => pl.id === p.playerId), p.playerId)}</span>
           ))}
         </div>
+      )}
+    </div>
+  );
+}
+
+const PHASE_NAMES: Record<string, { label: string; short: string }> = {
+  R16: { label: "Octavos de Final", short: "8vos" },
+  QF: { label: "Cuartos de Final", short: "4tos" },
+  SF: { label: "Semifinales", short: "Semis" },
+  F: { label: "Gran Final", short: "Final" },
+};
+
+function PhaseView({
+  state,
+  tabKey,
+  phaseInfo,
+  eliminationRooms,
+  players,
+}: {
+  state: TournamentState;
+  tabKey: string;
+  phaseInfo: { rooms: number; advance: number; phase: string; date: string; dateLabel: string };
+  eliminationRooms: EliminationRoom[];
+  players: TournamentState["players"];
+}) {
+  const phaseName = PHASE_NAMES[phaseInfo.phase]?.label ?? phaseInfo.phase;
+  const phaseShort = PHASE_NAMES[phaseInfo.phase]?.short ?? phaseInfo.phase;
+
+  if (eliminationRooms.length > 0) {
+    const active = eliminationRooms.filter(r => !r.completed);
+    const done = eliminationRooms.filter(r => r.completed);
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h3 className="font-semibold text-lg">{phaseName} — Salas</h3>
+          <span className="text-xs text-dorado">{phaseInfo.dateLabel}</span>
+        </div>
+        {active.length > 0 && (
+          <div>
+            <p className="text-xs text-dorado mb-3 font-medium">Activas</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {active.map(room => (
+                <GenericRoomCard key={room.roomId} room={room} phaseLabel={phaseShort} players={players} />
+              ))}
+            </div>
+          </div>
+        )}
+        {done.length > 0 && (
+          <div>
+            <p className="text-xs text-white/40 mb-3 font-medium">Completadas</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {done.map(room => (
+                <GenericRoomCard key={room.roomId} room={room} phaseLabel={phaseShort} players={players} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  const rooms: { id: string; label: string }[] = [];
+  for (let i = 0; i < phaseInfo.rooms; i++) {
+    const prefix = tabKey === "semifinal" ? "F" : phaseInfo.phase;
+    rooms.push({ id: `${prefix}_SALA${i + 1}`, label: `Sala ${i + 1}` });
+  }
+
+  return (
+    <div className="bg-navy-light rounded-xl shadow-lg border border-white/10 p-5">
+      <div className="flex items-center justify-between mb-1">
+        <h3 className="font-semibold">{phaseName}</h3>
+        <span className="text-xs text-dorado">{phaseInfo.dateLabel}</span>
+      </div>
+      <p className="text-xs text-white/40 mb-4">
+        {phaseInfo.rooms} {phaseInfo.rooms === 1 ? "sala" : "salas"} · 2 llaves por sala
+        {phaseInfo.advance > 0 && ` · ${phaseInfo.advance} jugadores avanzan`}
+      </p>
+      {phaseInfo.rooms > 1 ? (
+        <div className="space-y-3">
+          {rooms.map(room => (
+            <div key={room.id} className="bg-white/5 rounded-lg p-3 border border-white/10">
+              <p className="text-xs text-dorado font-semibold mb-2">{room.label}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="bg-white/5 rounded px-3 py-2">
+                  <span className="text-[10px] text-white/30 uppercase tracking-wide">Llave A</span>
+                  <p className="text-sm mt-0.5 text-white/20">Por definir</p>
+                </div>
+                <div className="bg-white/5 rounded px-3 py-2">
+                  <span className="text-[10px] text-white/30 uppercase tracking-wide">Llave B</span>
+                  <p className="text-sm mt-0.5 text-white/20">Por definir</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+          <p className="text-xs text-dorado font-semibold mb-3">Sala Unica — Semifinales + Final</p>
+          <div className="space-y-3">
+            <div className="bg-white/5 rounded px-3 py-2">
+              <span className="text-[10px] text-white/30 uppercase tracking-wide">Semifinal 1</span>
+              <p className="text-sm mt-0.5 text-white/20">Por definir vs Por definir</p>
+            </div>
+            <div className="bg-white/5 rounded px-3 py-2">
+              <span className="text-[10px] text-white/30 uppercase tracking-wide">Semifinal 2</span>
+              <p className="text-sm mt-0.5 text-white/20">Por definir vs Por definir</p>
+            </div>
+            <div className="mt-3 pt-3 border-t border-white/10">
+              <p className="text-xs text-white/40">La carrera final define el podio (1°, 2°, 3°).</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function GenericRoomCard({ room, phaseLabel, players }: { room: EliminationRoom; phaseLabel: string; players: TournamentState["players"] }) {
+  return (
+    <div className={`bg-navy-light rounded-xl shadow-lg border p-4 ${room.completed ? "border-white/10" : "border-rojo/40"}`}>
+      <div className="flex items-center justify-between mb-3">
+        <h4 className="font-semibold text-sm">{room.roomId.replace("_", " ")}</h4>
+        <span className="text-xs text-white/40">{phaseLabel}</span>
+      </div>
+      {room.brackets.map((b) => {
+        const p1 = playerName(players.find(p => p.id === b.player1Id), b.player1Id);
+        const p2 = playerName(players.find(p => p.id === b.player2Id), b.player2Id);
+        return (
+          <div key={b.bracketId} className="flex items-center gap-2 text-sm mb-1">
+            <span className="text-[10px] text-white/30 w-4">Llave {b.bracketId}:</span>
+            <span className={b.winnerId === b.player1Id ? "text-verde font-medium" : "text-white/70"}>{p1}</span>
+            <span className="text-white/30">vs</span>
+            <span className={b.winnerId === b.player2Id ? "text-verde font-medium" : "text-white/70"}>{p2}</span>
+            {b.winnerId && <span className="text-verde text-xs ml-1">✓</span>}
+          </div>
+        );
+      })}
+      {room.racePositions && (
+        <div className="mt-2 pt-2 border-t border-white/10 flex gap-3 text-xs text-white/40">
+          {[...room.racePositions].sort((a, b) => a.position - b.position).map((p) => (
+            <span key={p.playerId}>{p.position}° {playerName(players.find(pl => pl.id === p.playerId), p.playerId)}</span>
+          ))}
+        </div>
+      )}
+      {room.penalties && room.penalties.length > 0 && (
+        <div className="mt-2 text-xs text-rojo">Penalizaciones: {room.penalties.length}</div>
       )}
     </div>
   );
