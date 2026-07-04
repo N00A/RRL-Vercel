@@ -591,7 +591,7 @@ function GroupsView({ groups }: { groups: GroupStage[] }) {
     "2026-07-06T20:00:00": "Lunes 6 de Julio — 8:00 PM",
     "2026-07-08T20:00:00": "Miercoles 8 de Julio — 8:00 PM",
   };
-  const postponedDates = new Set(["2026-07-08T20:00:00"]);
+  const postponedDates = new Set<string>();
 
   return (
     <div className="space-y-8">
