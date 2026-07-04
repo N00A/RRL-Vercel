@@ -171,6 +171,12 @@
       ],
       "races": [],
       "penalties": [],
+      "finalRanking": [
+        { "playerId": "costa-de-marfil", "position": 1, "totalMkPoints": 180, "groupPoints": 9 },
+        { "playerId": "curazao", "position": 2, "totalMkPoints": 132, "groupPoints": 6 },
+        { "playerId": "alemania", "position": 3, "totalMkPoints": 92, "groupPoints": 3 },
+        { "playerId": "ecuador", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+      ],
       "date": "2026-07-02T20:00:00"
     },
     {
@@ -203,7 +209,7 @@
       ],
       "races": [],
       "penalties": [],
-      "date": "2026-07-02T20:00:00"
+      "date": "2026-07-05T21:00:00"
     },
     {
       "groupId": "G",
@@ -235,6 +241,12 @@
       ],
       "races": [],
       "penalties": [],
+      "finalRanking": [
+        { "playerId": "egipto", "position": 1, "totalMkPoints": 174, "groupPoints": 9 },
+        { "playerId": "iran", "position": 2, "totalMkPoints": 135, "groupPoints": 6 },
+        { "playerId": "belgica", "position": 3, "totalMkPoints": 121, "groupPoints": 3 },
+        { "playerId": "nz", "position": 4, "totalMkPoints": 101, "groupPoints": 0 }
+      ],
       "date": "2026-07-02T20:00:00"
     },
     {
@@ -267,6 +279,12 @@
       ],
       "races": [],
       "penalties": [],
+      "finalRanking": [
+        { "playerId": "cabo-verde", "position": 1, "totalMkPoints": 154, "groupPoints": 9 },
+        { "playerId": "uruguay", "position": 2, "totalMkPoints": 146, "groupPoints": 6 },
+        { "playerId": "espana", "position": 3, "totalMkPoints": 93, "groupPoints": 3 },
+        { "playerId": "arabia-saudita", "position": 4, "totalMkPoints": 87, "groupPoints": 0 }
+      ],
       "date": "2026-07-02T20:00:00"
     },
     {

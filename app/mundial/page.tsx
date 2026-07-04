@@ -1,9 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import type { TournamentState, GroupStage, EliminationRoom } from "@/types/tournament";
+import { useState, useEffect, useMemo } from "react";
+import type { TournamentState, GroupStage, EliminationRoom, BestThird } from "@/types/tournament";
 
 type TopScorer = { playerId: string; totalMkPoints: number };
+
+type BracketPairing = {
+  roomId: string;
+  bracketA: { player1Id: string; player1Name: string; player2Id: string; player2Name: string };
+  bracketB: { player1Id: string; player1Name: string; player2Id: string; player2Name: string };
+};
 
 const PHASE_LABELS: Record<string, string> = {
   GROUPS: "Fase de Grupos",
@@ -36,9 +42,92 @@ function formatFecha(iso: string): string {
   }) + " — " + d.toLocaleTimeString("es", { hour: "numeric", minute: "2-digit" });
 }
 
+function rankBestThirdsClient(thirds: BestThird[]): BestThird[] {
+  const sorted = [...thirds].sort((a, b) => {
+    if (b.groupPoints !== a.groupPoints) return b.groupPoints - a.groupPoints;
+    if (b.totalMkPoints !== a.totalMkPoints) return b.totalMkPoints - a.totalMkPoints;
+    return a.botCount - b.botCount;
+  });
+  return sorted.map((entry, idx) => ({ ...entry, rankPosition: idx + 1 }));
+}
+
+function computeR16Pairings(state: TournamentState): BracketPairing[] {
+  const groupWinners: { playerId: string; groupId: string }[] = [];
+  const runnersUp: { playerId: string; groupId: string }[] = [];
+  const allThirds: BestThird[] = [];
+
+  for (const group of state.groups) {
+    if (group.finalRanking) {
+      const ranking = group.finalRanking;
+      const winner = ranking.find(r => r.position === 1)!;
+      groupWinners.push({ playerId: winner.playerId, groupId: group.groupId });
+      const runnerUp = ranking.find(r => r.position === 2)!;
+      runnersUp.push({ playerId: runnerUp.playerId, groupId: group.groupId });
+      const third = ranking.find(r => r.position === 3)!;
+      const player = group.players.find(p => p.id === third.playerId)!;
+      allThirds.push({
+        playerId: third.playerId,
+        groupId: group.groupId,
+        groupPoints: third.groupPoints,
+        totalMkPoints: third.totalMkPoints,
+        botCount: player.botCount,
+      });
+    } else {
+      groupWinners.push({ playerId: "", groupId: group.groupId });
+      runnersUp.push({ playerId: "", groupId: group.groupId });
+    }
+  }
+
+  const rankedThirds = rankBestThirdsClient(allThirds);
+  const qualifiedThirds = rankedThirds.filter(t => t.rankPosition! <= 8);
+
+  const emptySlot = { playerId: "", groupId: "" };
+
+  const pot1: typeof groupWinners = [...groupWinners.slice(0, 8)];
+  while (pot1.length < 8) pot1.push(emptySlot);
+
+  const pot2: typeof groupWinners = [...groupWinners.slice(8), ...runnersUp.slice(0, 4)];
+  while (pot2.length < 8) pot2.push(emptySlot);
+
+  const pot3: typeof groupWinners = [...runnersUp.slice(4)];
+  while (pot3.length < 8) pot3.push(emptySlot);
+
+  const pot4: typeof groupWinners = [...qualifiedThirds.map(t => ({ playerId: t.playerId, groupId: t.groupId }))];
+  while (pot4.length < 8) pot4.push(emptySlot);
+
+  const rooms: BracketPairing[] = [];
+  const allPlayers = state.players;
+
+  for (let i = 0; i < 8; i++) {
+    const p1 = pot1[i];
+    const p2 = pot2[i];
+    const p3 = pot3[i];
+    const p4 = pot4[i];
+
+    rooms.push({
+      roomId: `R16_SALA${i + 1}`,
+      bracketA: {
+        player1Id: p1.playerId,
+        player1Name: p1.playerId ? playerName(allPlayers.find(p => p.id === p1.playerId), p1.playerId) : "Por definir",
+        player2Id: p2.playerId,
+        player2Name: p2.playerId ? playerName(allPlayers.find(p => p.id === p2.playerId), p2.playerId) : "Por definir",
+      },
+      bracketB: {
+        player1Id: p3.playerId,
+        player1Name: p3.playerId ? playerName(allPlayers.find(p => p.id === p3.playerId), p3.playerId) : "Por definir",
+        player2Id: p4.playerId,
+        player2Name: p4.playerId ? playerName(allPlayers.find(p => p.id === p4.playerId), p4.playerId) : "Por definir",
+      },
+    });
+  }
+
+  return rooms;
+}
+
 export default function MundialPage() {
   const [state, setState] = useState<TournamentState | null>(null);
   const [topScorers, setTopScorers] = useState<TopScorer[]>([]);
+  const [tab, setTab] = useState<"grupos" | "dieciseisavos">("grupos");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -59,9 +148,30 @@ export default function MundialPage() {
       });
   }, []);
 
+  const r16Pairings = useMemo(() => state ? computeR16Pairings(state) : [], [state]);
+  const clientBestThirds = useMemo(() => state ? computeAllThirds(state) : [], [state]);
+  const rankedClientBestThirds = useMemo(() => rankBestThirdsClient(clientBestThirds), [clientBestThirds]);
+
+  const handleRefresh = () => {
+    setLoading(true);
+    fetch("/api/tournament")
+      .then((r) => r.json())
+      .then((data) => {
+        setState(data);
+        setTopScorers(data.topScorers ?? []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  };
+
   if (loading) return <div className="text-center py-12 text-white/40">Cargando Mundial 2026...</div>;
   if (error) return <div className="text-center py-12 text-rojo">{error}</div>;
   if (!state) return <div className="text-center py-12 text-white/40">Sin datos</div>;
+
+  const tabs = [
+    { key: "grupos" as const, label: "Grupos" },
+    { key: "dieciseisavos" as const, label: "16vos" },
+  ];
 
   return (
     <div>
@@ -71,9 +181,17 @@ export default function MundialPage() {
             <h1 className="text-2xl font-bold">Mario Kart Mundial 2026</h1>
             <p className="text-white/60 text-sm mt-1">48 selecciones — 12 grupos de 4</p>
           </div>
-          <span className={`text-xs px-3 py-1 rounded-full font-medium ${PHASE_COLORS[state.phase]}`}>
-            {PHASE_LABELS[state.phase]}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className={`text-xs px-3 py-1 rounded-full font-medium ${PHASE_COLORS[state.phase]}`}>
+              {PHASE_LABELS[state.phase]}
+            </span>
+            <button
+              onClick={handleRefresh}
+              className="text-xs text-white/40 hover:text-white/60 transition-colors"
+            >
+              ↻
+            </button>
+          </div>
         </div>
         {state.podium && (
           <div className="mt-4 bg-dorado/10 border border-dorado/30 rounded-lg p-4 text-center">
@@ -87,23 +205,197 @@ export default function MundialPage() {
         )}
       </div>
 
+      {/* Tab Navigation */}
+      <div className="flex gap-1 mb-6 border-b border-white/10">
+        {tabs.map((t) => (
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            className={`px-4 py-2 text-sm font-medium transition-colors rounded-t-lg ${
+              tab === t.key
+                ? "bg-navy-light text-white border-b-2 border-rojo"
+                : "text-white/40 hover:text-white/60"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
       {topScorers.length > 0 && (
         <div className="mb-6">
           <GoleadoresView scorers={topScorers} players={state.players} />
         </div>
       )}
 
-      {state.phase === "GROUPS" && (
+      {tab === "grupos" && (
         <>
           <GroupsView groups={state.groups} />
-          <BestThirdsInfo />
+          {rankedClientBestThirds.length > 0 && <BestThirdsView thirds={rankedClientBestThirds} players={state.players} />}
           <BracketInfo />
+          {state.eliminationRooms.length > 0 && <EliminationView rooms={state.eliminationRooms} players={state.players} />}
         </>
       )}
-      {state.bestThirds && <BestThirdsView thirds={state.bestThirds} players={state.players} />}
-      {state.eliminationRooms.length > 0 && <EliminationView rooms={state.eliminationRooms} players={state.players} />}
+
+      {tab === "dieciseisavos" && (
+        <R16View
+          state={state}
+          r16Pairings={r16Pairings}
+          players={state.players}
+          bestThirds={rankedClientBestThirds}
+          eliminationRooms={state.eliminationRooms.filter(r => r.phase === "R16")}
+        />
+      )}
     </div>
   );
+}
+
+function R16View({
+  state,
+  r16Pairings,
+  players,
+  bestThirds,
+  eliminationRooms,
+}: {
+  state: TournamentState;
+  r16Pairings: BracketPairing[];
+  players: TournamentState["players"];
+  bestThirds: BestThird[];
+  eliminationRooms: EliminationRoom[];
+}) {
+  const closed = state.groups.filter(g => g.finalRanking).length;
+  const allClosed = closed === 12;
+
+  if (eliminationRooms.length > 0) {
+    return (
+      <div>
+        <h3 className="font-semibold text-lg mb-4">Dieciseisavos de Final — Salas</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {eliminationRooms.map(room => (
+            <R16RoomCard key={room.roomId} room={room} players={players} />
+          ))}
+        </div>
+        {bestThirds.length > 0 && <BestThirdsView thirds={bestThirds} players={players} />}
+      </div>
+    );
+  }
+
+  const totalSlots = 12;
+  return (
+    <div>
+      <div className="bg-navy-light rounded-xl shadow-lg border border-white/10 p-5 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="font-semibold">Cuadro de Dieciseisavos</h3>
+            <p className="text-xs text-white/40 mt-0.5">
+              {closed}/{totalSlots} grupos cerrados · 8 salas · 2 llaves por sala
+            </p>
+          </div>
+          <div className="flex items-center gap-1.5">
+            {state.groups.map(g => (
+              <span
+                key={g.groupId}
+                className={`w-5 h-5 text-[9px] rounded flex items-center justify-center font-bold ${
+                  g.finalRanking
+                    ? "bg-verde/20 text-verde"
+                    : "bg-white/10 text-white/30"
+                }`}
+              >
+                {g.groupId}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          {r16Pairings.map(room => (
+            <div key={room.roomId} className="bg-white/5 rounded-lg p-3 border border-white/10">
+              <p className="text-xs text-dorado font-semibold mb-2">{room.roomId.replace("_", " ")}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="bg-white/5 rounded px-3 py-2">
+                  <span className="text-[10px] text-white/30 uppercase tracking-wide">Llave A</span>
+                  <p className="text-sm mt-0.5">
+                    <span className={`font-medium ${room.bracketA.player1Id ? "text-rojo" : "text-white/20"}`}>
+                      {room.bracketA.player1Name}
+                    </span>
+                    <span className="text-white/30 mx-2">vs</span>
+                    <span className={room.bracketA.player2Id ? "text-white/80" : "text-white/20"}>
+                      {room.bracketA.player2Name}
+                    </span>
+                  </p>
+                </div>
+                <div className="bg-white/5 rounded px-3 py-2">
+                  <span className="text-[10px] text-white/30 uppercase tracking-wide">Llave B</span>
+                  <p className="text-sm mt-0.5">
+                    <span className={`font-medium ${room.bracketB.player1Id ? "text-rojo" : "text-white/20"}`}>
+                      {room.bracketB.player1Name}
+                    </span>
+                    <span className="text-white/30 mx-2">vs</span>
+                    <span className={room.bracketB.player2Id ? "text-white/80" : "text-white/20"}>
+                      {room.bracketB.player2Name}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <BestThirdsView thirds={bestThirds} players={players} />
+    </div>
+  );
+}
+
+function R16RoomCard({ room, players }: { room: EliminationRoom; players: TournamentState["players"] }) {
+  return (
+    <div className={`bg-navy-light rounded-xl shadow-lg border p-4 ${room.completed ? "border-white/10" : "border-rojo/40"}`}>
+      <div className="flex items-center justify-between mb-3">
+        <h4 className="font-semibold text-sm">{room.roomId.replace("_", " ")}</h4>
+        <span className="text-xs text-white/40">16vos</span>
+      </div>
+      {room.brackets.map((b) => {
+        const p1 = playerName(players.find(p => p.id === b.player1Id), b.player1Id);
+        const p2 = playerName(players.find(p => p.id === b.player2Id), b.player2Id);
+        return (
+          <div key={b.bracketId} className="flex items-center gap-2 text-sm mb-1">
+            <span className="text-[10px] text-white/30 w-4">Llave {b.bracketId}:</span>
+            <span className={b.winnerId === b.player1Id ? "text-verde font-medium" : "text-white/70"}>{p1}</span>
+            <span className="text-white/30">vs</span>
+            <span className={b.winnerId === b.player2Id ? "text-verde font-medium" : "text-white/70"}>{p2}</span>
+            {b.winnerId && <span className="text-verde text-xs ml-1">✓</span>}
+          </div>
+        );
+      })}
+      {room.racePositions && (
+        <div className="mt-2 pt-2 border-t border-white/10 flex gap-3 text-xs text-white/40">
+          {[...room.racePositions].sort((a, b) => a.position - b.position).map((p) => (
+            <span key={p.playerId}>{p.position}° {playerName(players.find(pl => pl.id === p.playerId), p.playerId)}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function computeAllThirds(state: TournamentState): BestThird[] {
+  const allThirds: BestThird[] = [];
+  for (const group of state.groups) {
+    const ranking = group.finalRanking;
+    if (!ranking) continue;
+    const third = ranking.find(r => r.position === 3);
+    if (!third) continue;
+    const player = group.players.find(p => p.id === third.playerId);
+    if (!player) continue;
+    allThirds.push({
+      playerId: third.playerId,
+      groupId: group.groupId,
+      groupPoints: third.groupPoints,
+      totalMkPoints: third.totalMkPoints,
+      botCount: player.botCount,
+    });
+  }
+  return allThirds;
 }
 
 function GroupsView({ groups }: { groups: GroupStage[] }) {
@@ -117,6 +409,8 @@ function GroupsView({ groups }: { groups: GroupStage[] }) {
   const dateLabels: Record<string, string> = {
     "2026-07-01T20:00:00": "Miercoles 1 de Julio — 8:00 PM",
     "2026-07-02T20:00:00": "Jueves 2 de Julio — 8:00 PM",
+    "2026-07-05T21:00:00": "Domingo 5 de Julio — 9:00 PM",
+    "2026-07-06T20:00:00": "Lunes 6 de Julio — 8:00 PM",
     "2026-07-08T20:00:00": "Miercoles 8 de Julio — 8:00 PM",
   };
   const postponedDates = new Set(["2026-07-08T20:00:00"]);
@@ -130,7 +424,7 @@ function GroupsView({ groups }: { groups: GroupStage[] }) {
           return (
         <div key={date}>
           <h3 className="text-sm font-semibold text-dorado mb-3 uppercase tracking-wide">
-            {dateLabels[date] ?? formatFecha(date)}
+            {isPostponed ? "⏰ Reprogramados" : dateLabels[date] ?? formatFecha(date)}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {grupos.map((group) => {
@@ -180,22 +474,31 @@ function GroupsView({ groups }: { groups: GroupStage[] }) {
   );
 }
 
-function BestThirdsInfo() {
+function BestThirdsView({ thirds, players }: { thirds: BestThird[]; players: TournamentState["players"] }) {
+  if (!thirds || thirds.length === 0) return null;
   return (
-    <div className="mt-8 bg-navy-light rounded-xl shadow-lg border border-amber-500/30 p-5">
-      <h3 className="font-semibold mb-3">Mejores Terceros</h3>
-      <p className="text-sm text-white/60 mb-3">
-        Los 12 equipos que queden en 3<sup>er</sup> lugar de cada grupo se ordenan para determinar los 8 que clasifican a dieciseisavos.
-      </p>
-      <div className="text-sm space-y-1 text-white/70">
-        <p><span className="text-dorado">1.</span> Puntos de grupo (todos tendran 3)</p>
-        <p><span className="text-dorado">2.</span> Puntos MK totales <span className="text-white/40">(mayor = mejor)</span></p>
-        <p><span className="text-dorado">3.</span> Cantidad de BOTs en el grupo <span className="text-white/40">(menos bots = grupo mas dificil = prevalece)</span></p>
-        <p><span className="text-dorado">4.</span> Sorteo externo en caso de empate total</p>
+    <div className="mt-6 bg-navy-light rounded-xl shadow-lg border border-amber-500/30 p-5">
+      <h3 className="font-semibold mb-3">Ranking de Mejores Terceros</h3>
+      <div className="space-y-1">
+        {thirds.map((t, i) => {
+          const isIn = t.rankPosition! <= 8;
+          const cls = isIn ? "bg-verde/10 border border-verde/20" : "bg-white/5";
+          return (
+            <div key={t.playerId} className={`text-xs flex items-center justify-between p-2 rounded ${cls}`}>
+              <span className="flex items-center gap-2">
+                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${isIn ? "bg-verde/30 text-verde" : "bg-white/10 text-white/40"}`}>
+                  {t.rankPosition}
+                </span>
+                <span className={isIn ? "text-verde" : "text-white/40"}>
+                  {playerName(players.find(p => p.id === t.playerId), t.playerId)}
+                </span>
+              </span>
+              <span className="text-white/40">Grupo {t.groupId} · {t.totalMkPoints} MK · {t.botCount} bots</span>
+            </div>
+          );
+        })}
       </div>
-      <p className="text-xs text-white/40 mt-3">
-        Clasifican los 8 mejores terceros. La tabla se calculara automaticamente al cerrar todos los grupos.
-      </p>
+      <p className="text-xs text-white/40 mt-3">Los primeros 8 clasifican a dieciseisavos (fondo verde).</p>
     </div>
   );
 }
@@ -234,38 +537,10 @@ function BracketInfo() {
   );
 }
 
-function BestThirdsView({ thirds, players }: { thirds: TournamentState["bestThirds"]; players: TournamentState["players"] }) {
-  if (!thirds) return null;
-  return (
-    <div className="mt-6 bg-navy-light rounded-xl shadow-lg border border-amber-500/30 p-5">
-      <h3 className="font-semibold mb-3">Ranking de Mejores Terceros</h3>
-      <div className="space-y-1">
-        {thirds.map((t, i) => {
-          const isIn = t.rankPosition! <= 8;
-          const cls = isIn ? "bg-verde/10 border border-verde/20" : "bg-white/5";
-          return (
-            <div key={t.playerId} className={`text-xs flex items-center justify-between p-2 rounded ${cls}`}>
-              <span className="flex items-center gap-2">
-                <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${isIn ? "bg-verde/30 text-verde" : "bg-white/10 text-white/40"}`}>
-                  {t.rankPosition}
-                </span>
-                <span className={isIn ? "text-verde" : "text-white/40"}>
-                  {playerName(players.find(p => p.id === t.playerId), t.playerId)}
-                </span>
-              </span>
-              <span className="text-white/40">Grupo {t.groupId} · {t.totalMkPoints} MK · {t.botCount} bots</span>
-            </div>
-          );
-        })}
-      </div>
-      <p className="text-xs text-white/40 mt-3">Los primeros 8 clasifican a dieciseisavos (fondo verde).</p>
-    </div>
-  );
-}
-
 function EliminationView({ rooms, players }: { rooms: EliminationRoom[]; players: TournamentState["players"] }) {
   const activeRooms = rooms.filter(r => !r.completed);
   const doneRooms = rooms.filter(r => r.completed);
+  if (rooms.length === 0) return null;
   return (
     <div className="mt-6 space-y-6">
       {activeRooms.length > 0 && (
