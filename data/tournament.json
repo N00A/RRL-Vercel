@@ -215,6 +215,12 @@
       ],
       "races": [],
       "penalties": [],
+      "finalRanking": [
+        { "playerId": "tunez", "position": 1, "totalMkPoints": 180, "groupPoints": 9 },
+        { "playerId": "paises-bajos", "position": 2, "totalMkPoints": 150, "groupPoints": 6 },
+        { "playerId": "japon", "position": 3, "totalMkPoints": 0, "groupPoints": 3 },
+        { "playerId": "suecia", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+      ],
       "date": "2026-07-05T21:00:00"
     },
     {
