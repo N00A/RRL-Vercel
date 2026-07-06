@@ -11,14 +11,14 @@
           "botCount": 1
         },
         {
-          "id": "sudafrica",
-          "name": "Sudafrica (Marcelo)",
+          "id": "corea-del-sur",
+          "name": "Corea del Sur (Changa)",
           "groupId": "A",
           "botCount": 1
         },
         {
-          "id": "corea-del-sur",
-          "name": "Corea del Sur (Changa)",
+          "id": "rumania",
+          "name": "Rumania (BOT)",
           "groupId": "A",
           "botCount": 1
         },
@@ -31,6 +31,12 @@
       ],
       "races": [],
       "penalties": [],
+      "finalRanking": [
+        { "playerId": "corea-del-sur", "position": 1, "totalMkPoints": 180, "groupPoints": 9 },
+        { "playerId": "mexico", "position": 2, "totalMkPoints": 119, "groupPoints": 6 },
+        { "playerId": "republica-checa", "position": 3, "totalMkPoints": 89, "groupPoints": 3 },
+        { "playerId": "rumania", "position": 4, "totalMkPoints": 76, "groupPoints": 0 }
+      ],
       "date": "2026-07-08T20:00:00"
     },
     {
@@ -425,14 +431,14 @@
       "botCount": 1
     },
     {
-      "id": "sudafrica",
-      "name": "Sudafrica (Marcelo)",
+      "id": "corea-del-sur",
+      "name": "Corea del Sur (Changa)",
       "groupId": "A",
       "botCount": 1
     },
     {
-      "id": "corea-del-sur",
-      "name": "Corea del Sur (Changa)",
+      "id": "rumania",
+      "name": "Rumania (BOT)",
       "groupId": "A",
       "botCount": 1
     },
@@ -440,6 +446,12 @@
       "id": "republica-checa",
       "name": "Republica Checa (Paula Rojas)",
       "groupId": "A",
+      "botCount": 1
+    },
+    {
+      "id": "sudafrica",
+      "name": "Sudafrica (Marcelo)",
+      "groupId": "J",
       "botCount": 1
     },
     {
