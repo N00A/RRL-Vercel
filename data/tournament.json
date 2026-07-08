@@ -310,25 +310,31 @@
         },
         {
           "id": "senegal",
-          "name": "Senegal (Rafael Largacha O)",
+          "name": "Senegal (Rafaholy)",
           "groupId": "I",
           "botCount": 1
         },
         {
           "id": "irak",
-          "name": "Irak (Victor Sabogal)",
+          "name": "Irak (Cubio)",
           "groupId": "I",
           "botCount": 1
         },
         {
           "id": "noruega",
-          "name": "Noruega (Juan Gonzalez C)",
+          "name": "Noruega (Juank)",
           "groupId": "I",
           "botCount": 1
         }
       ],
       "races": [],
       "penalties": [],
+      "finalRanking": [
+        { "playerId": "irak", "position": 1, "totalMkPoints": 158, "groupPoints": 9 },
+        { "playerId": "noruega", "position": 2, "totalMkPoints": 153, "groupPoints": 6 },
+        { "playerId": "francia", "position": 3, "totalMkPoints": 88, "groupPoints": 3 },
+        { "playerId": "senegal", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+      ],
       "date": "2026-07-06T20:00:00"
     },
     {
@@ -336,7 +342,7 @@
       "players": [
         {
           "id": "argentina",
-          "name": "Argentina (Samuel Herrera)",
+          "name": "Argentina (Samuel)",
           "groupId": "J",
           "botCount": 2
         },
@@ -361,6 +367,12 @@
       ],
       "races": [],
       "penalties": [],
+      "finalRanking": [
+        { "playerId": "argentina", "position": 1, "totalMkPoints": 180, "groupPoints": 9 },
+        { "playerId": "argelia", "position": 2, "totalMkPoints": 0, "groupPoints": 6 },
+        { "playerId": "austria", "position": 3, "totalMkPoints": 0, "groupPoints": 3 },
+        { "playerId": "jordania", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+      ],
       "date": "2026-07-06T20:00:00"
     },
     {
@@ -368,13 +380,13 @@
       "players": [
         {
           "id": "portugal",
-          "name": "Portugal (Mr Panda)",
+          "name": "Portugal (Panda)",
           "groupId": "K",
           "botCount": 1
         },
         {
           "id": "rd-congo",
-          "name": "Republica Democratica del Congo (Daevid Julian)",
+          "name": "Republica Democratica del Congo (Daevid)",
           "groupId": "K",
           "botCount": 1
         },
@@ -386,13 +398,19 @@
         },
         {
           "id": "colombia",
-          "name": "Colombia (Catalina Garcia Cubillos)",
+          "name": "Colombia (Catitu)",
           "groupId": "K",
           "botCount": 1
         }
       ],
       "races": [],
       "penalties": [],
+      "finalRanking": [
+        { "playerId": "rd-congo", "position": 1, "totalMkPoints": 165, "groupPoints": 9 },
+        { "playerId": "colombia", "position": 2, "totalMkPoints": 151, "groupPoints": 6 },
+        { "playerId": "uzbekistan", "position": 3, "totalMkPoints": 105, "groupPoints": 3 },
+        { "playerId": "portugal", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+      ],
       "date": "2026-07-06T20:00:00"
     },
     {
@@ -425,6 +443,12 @@
       ],
       "races": [],
       "penalties": [],
+      "finalRanking": [
+        { "playerId": "ghana", "position": 1, "totalMkPoints": 169, "groupPoints": 9 },
+        { "playerId": "inglaterra", "position": 2, "totalMkPoints": 150, "groupPoints": 6 },
+        { "playerId": "croacia", "position": 3, "totalMkPoints": 105, "groupPoints": 3 },
+        { "playerId": "panama", "position": 4, "totalMkPoints": 104, "groupPoints": 0 }
+      ],
       "date": "2026-07-06T20:00:00"
     }
   ],
@@ -642,19 +666,25 @@
     },
     {
       "id": "irak",
-      "name": "Irak (Victor Sabogal)",
+      "name": "Irak (Cubio)",
       "groupId": "I",
       "botCount": 1
     },
     {
       "id": "noruega",
-      "name": "Noruega (Juan Gonzalez C)",
+      "name": "Noruega (Juank)",
+      "groupId": "I",
+      "botCount": 1
+    },
+    {
+      "id": "senegal",
+      "name": "Senegal (Rafaholy)",
       "groupId": "I",
       "botCount": 1
     },
     {
       "id": "argentina",
-      "name": "Argentina (Samuel Herrera)",
+      "name": "Argentina (Samuel)",
       "groupId": "J",
       "botCount": 2
     },
@@ -678,13 +708,13 @@
     },
     {
       "id": "portugal",
-      "name": "Portugal (Mr Panda)",
+      "name": "Portugal (Panda)",
       "groupId": "K",
       "botCount": 1
     },
     {
       "id": "rd-congo",
-      "name": "Republica Democratica del Congo (Daevid Julian)",
+      "name": "Republica Democratica del Congo (Daevid)",
       "groupId": "K",
       "botCount": 1
     },
@@ -696,7 +726,7 @@
     },
     {
       "id": "colombia",
-      "name": "Colombia (Catalina Garcia Cubillos)",
+      "name": "Colombia (Catitu)",
       "groupId": "K",
       "botCount": 1
     },
