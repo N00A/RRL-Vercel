@@ -7,6 +7,12 @@ type TopScorer = { playerId: string; totalMkPoints: number };
 
 type BracketPairing = {
   roomId: string;
+  bracketA: { player1Id: string; player1Name: string; player2Id: string; player2Name: string; winnerId?: string };
+  bracketB: { player1Id: string; player1Name: string; player2Id: string; player2Name: string; winnerId?: string };
+};
+
+type QFPairing = {
+  roomId: string;
   bracketA: { player1Id: string; player1Name: string; player2Id: string; player2Name: string };
   bracketB: { player1Id: string; player1Name: string; player2Id: string; player2Name: string };
 };
@@ -189,6 +195,16 @@ function computeR16Pairings(state: TournamentState): BracketPairing[] {
   const rooms: BracketPairing[] = [];
   const allPlayers = state.players;
 
+  const isBot = (pid: string) =>
+    allPlayers.find(p => p.id === pid)?.name.includes("(BOT)") ?? false;
+
+  const autoWinner = (p1Id: string, p2Id: string): string | undefined => {
+    const p1Bot = isBot(p1Id);
+    const p2Bot = isBot(p2Id);
+    if (p1Bot !== p2Bot) return p1Bot ? p2Id : p1Id;
+    return undefined;
+  };
+
   for (let i = 0; i < 8; i++) {
     const bA = allBrackets[i * 2] ?? { player1Id: "", player2Id: "" };
     const bB = allBrackets[i * 2 + 1] ?? { player1Id: "", player2Id: "" };
@@ -200,17 +216,51 @@ function computeR16Pairings(state: TournamentState): BracketPairing[] {
         player1Name: bA.player1Id ? playerName(allPlayers.find(p => p.id === bA.player1Id), bA.player1Id) : "Por definir",
         player2Id: bA.player2Id,
         player2Name: bA.player2Id ? playerName(allPlayers.find(p => p.id === bA.player2Id), bA.player2Id) : "Por definir",
+        winnerId: autoWinner(bA.player1Id, bA.player2Id),
       },
       bracketB: {
         player1Id: bB.player1Id,
         player1Name: bB.player1Id ? playerName(allPlayers.find(p => p.id === bB.player1Id), bB.player1Id) : "Por definir",
         player2Id: bB.player2Id,
         player2Name: bB.player2Id ? playerName(allPlayers.find(p => p.id === bB.player2Id), bB.player2Id) : "Por definir",
+        winnerId: autoWinner(bB.player1Id, bB.player2Id),
       },
     });
   }
 
   return rooms;
+}
+
+function computeQFPairings(r16Pairings: BracketPairing[], players: TournamentState["players"]): QFPairing[] {
+  const allWinners: (string | undefined)[] = [];
+  for (const room of r16Pairings) {
+    allWinners.push(room.bracketA.winnerId);
+    allWinners.push(room.bracketB.winnerId);
+  }
+
+  const qfRooms: QFPairing[] = [];
+  for (let i = 0; i < 4; i++) {
+    const start = i * 4;
+    const w = allWinners.slice(start, start + 4);
+
+    qfRooms.push({
+      roomId: `QF_SALA${i + 1}`,
+      bracketA: {
+        player1Id: w[0] ?? "",
+        player1Name: w[0] ? playerName(players.find(p => p.id === w[0]), w[0]) : "Por definir",
+        player2Id: w[1] ?? "",
+        player2Name: w[1] ? playerName(players.find(p => p.id === w[1]), w[1]) : "Por definir",
+      },
+      bracketB: {
+        player1Id: w[2] ?? "",
+        player1Name: w[2] ? playerName(players.find(p => p.id === w[2]), w[2]) : "Por definir",
+        player2Id: w[3] ?? "",
+        player2Name: w[3] ? playerName(players.find(p => p.id === w[3]), w[3]) : "Por definir",
+      },
+    });
+  }
+
+  return qfRooms;
 }
 
 type TabKey = "grupos" | "dieciseisavos" | "octavos" | "cuartos" | "semifinal";
@@ -247,6 +297,7 @@ export default function MundialPage() {
   }, []);
 
   const r16Pairings = useMemo(() => state ? computeR16Pairings(state) : [], [state]);
+  const qfPairings = useMemo(() => r16Pairings.length > 0 ? computeQFPairings(r16Pairings, state!.players) : [], [r16Pairings, state]);
   const clientBestThirds = useMemo(() => state ? computeAllThirds(state) : [], [state]);
   const rankedClientBestThirds = useMemo(() => rankBestThirdsClient(clientBestThirds), [clientBestThirds]);
 
@@ -359,6 +410,7 @@ export default function MundialPage() {
           phaseInfo={PHASE_ROOMS[tab]}
           eliminationRooms={phaseRooms(PHASE_ROOMS[tab].phase)}
           players={state.players}
+          qfPreview={tab === "octavos" ? qfPairings : undefined}
         />
       )}
     </div>
@@ -436,25 +488,27 @@ function R16View({
                 <div className="bg-white/5 rounded px-3 py-2">
                   <span className="text-[10px] text-white/30 uppercase tracking-wide">Llave A</span>
                   <p className="text-sm mt-0.5">
-                    <span className={`font-medium ${room.bracketA.player1Id ? "text-rojo" : "text-white/20"}`}>
+                    <span className={`font-medium ${room.bracketA.winnerId === room.bracketA.player1Id ? "text-verde" : room.bracketA.player1Id ? "text-rojo" : "text-white/20"}`}>
                       {room.bracketA.player1Name}
                     </span>
                     <span className="text-white/30 mx-2">vs</span>
-                    <span className={room.bracketA.player2Id ? "text-white/80" : "text-white/20"}>
+                    <span className={room.bracketA.winnerId === room.bracketA.player2Id ? "text-verde font-medium" : room.bracketA.player2Id ? "text-white/80" : "text-white/20"}>
                       {room.bracketA.player2Name}
                     </span>
+                    {room.bracketA.winnerId && <span className="text-verde text-xs ml-1">✓</span>}
                   </p>
                 </div>
                 <div className="bg-white/5 rounded px-3 py-2">
                   <span className="text-[10px] text-white/30 uppercase tracking-wide">Llave B</span>
                   <p className="text-sm mt-0.5">
-                    <span className={`font-medium ${room.bracketB.player1Id ? "text-rojo" : "text-white/20"}`}>
+                    <span className={`font-medium ${room.bracketB.winnerId === room.bracketB.player1Id ? "text-verde" : room.bracketB.player1Id ? "text-rojo" : "text-white/20"}`}>
                       {room.bracketB.player1Name}
                     </span>
                     <span className="text-white/30 mx-2">vs</span>
-                    <span className={room.bracketB.player2Id ? "text-white/80" : "text-white/20"}>
+                    <span className={room.bracketB.winnerId === room.bracketB.player2Id ? "text-verde font-medium" : room.bracketB.player2Id ? "text-white/80" : "text-white/20"}>
                       {room.bracketB.player2Name}
                     </span>
+                    {room.bracketB.winnerId && <span className="text-verde text-xs ml-1">✓</span>}
                   </p>
                 </div>
               </div>
@@ -512,12 +566,14 @@ function PhaseView({
   phaseInfo,
   eliminationRooms,
   players,
+  qfPreview,
 }: {
   state: TournamentState;
   tabKey: string;
   phaseInfo: { rooms: number; advance: number; phase: string; date: string; dateLabel: string };
   eliminationRooms: EliminationRoom[];
   players: TournamentState["players"];
+  qfPreview?: QFPairing[];
 }) {
   const phaseName = PHASE_NAMES[phaseInfo.phase]?.label ?? phaseInfo.phase;
   const phaseShort = PHASE_NAMES[phaseInfo.phase]?.short ?? phaseInfo.phase;
@@ -561,6 +617,8 @@ function PhaseView({
     rooms.push({ id: `${prefix}_SALA${i + 1}`, label: `Sala ${i + 1}` });
   }
 
+  const preview = phaseInfo.rooms > 1 && qfPreview;
+
   return (
     <div className="bg-navy-light rounded-xl shadow-lg border border-white/10 p-5">
       <div className="flex items-center justify-between mb-1">
@@ -570,24 +628,55 @@ function PhaseView({
       <p className="text-xs text-white/40 mb-4">
         {phaseInfo.rooms} {phaseInfo.rooms === 1 ? "sala" : "salas"} · 2 llaves por sala
         {phaseInfo.advance > 0 && ` · ${phaseInfo.advance} jugadores avanzan`}
-      </p>
+        {preview && " · vista previa según resultados automáticos"}</p>
       {phaseInfo.rooms > 1 ? (
         <div className="space-y-3">
-          {rooms.map(room => (
+          {rooms.map((room, idx) => {
+            const p = preview ? qfPreview![idx] : undefined;
+            return (
             <div key={room.id} className="bg-white/5 rounded-lg p-3 border border-white/10">
               <p className="text-xs text-dorado font-semibold mb-2">{room.label}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 <div className="bg-white/5 rounded px-3 py-2">
                   <span className="text-[10px] text-white/30 uppercase tracking-wide">Llave A</span>
-                  <p className="text-sm mt-0.5 text-white/20">Por definir</p>
+                  <p className="text-sm mt-0.5">
+                    {p ? (
+                      <>
+                        <span className={`font-medium ${p.bracketA.player1Id ? "" : "text-white/20"}`}>
+                          {p.bracketA.player1Name}
+                        </span>
+                        <span className="text-white/30 mx-2">vs</span>
+                        <span className={p.bracketA.player2Id ? "font-medium" : "text-white/20"}>
+                          {p.bracketA.player2Name}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-white/20">Por definir</span>
+                    )}
+                  </p>
                 </div>
                 <div className="bg-white/5 rounded px-3 py-2">
                   <span className="text-[10px] text-white/30 uppercase tracking-wide">Llave B</span>
-                  <p className="text-sm mt-0.5 text-white/20">Por definir</p>
+                  <p className="text-sm mt-0.5">
+                    {p ? (
+                      <>
+                        <span className={`font-medium ${p.bracketB.player1Id ? "" : "text-white/20"}`}>
+                          {p.bracketB.player1Name}
+                        </span>
+                        <span className="text-white/30 mx-2">vs</span>
+                        <span className={p.bracketB.player2Id ? "font-medium" : "text-white/20"}>
+                          {p.bracketB.player2Name}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-white/20">Por definir</span>
+                    )}
+                  </p>
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div className="bg-white/5 rounded-lg p-4 border border-white/10">

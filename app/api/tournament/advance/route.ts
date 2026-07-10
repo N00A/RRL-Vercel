@@ -244,6 +244,25 @@ export async function POST(_req: NextRequest) {
             { runnerGroup: 'G', thirdGroup: 'C' }, // Iran vs Brasil
           ]
         );
+
+        // Auto-resolve brackets where a human faces a bot
+        const isBot = (playerId: string) =>
+          state.players.find(p => p.id === playerId)?.name.includes("(BOT)") ?? false;
+
+        for (const room of state.eliminationRooms) {
+          for (const bracket of room.brackets) {
+            if (bracket.winnerId) continue;
+            const p1Bot = isBot(bracket.player1Id);
+            const p2Bot = isBot(bracket.player2Id);
+            if (p1Bot !== p2Bot) {
+              bracket.winnerId = p1Bot ? bracket.player2Id : bracket.player1Id;
+            }
+          }
+          if (room.brackets.every(b => !!b.winnerId) && !room.racePositions) {
+            room.completed = true;
+          }
+        }
+
         state.phase = "R16";
         break;
       }
