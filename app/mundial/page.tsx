@@ -81,42 +81,131 @@ function computeR16Pairings(state: TournamentState): BracketPairing[] {
   const rankedThirds = rankBestThirdsClient(allThirds);
   const qualifiedThirds = rankedThirds.filter(t => t.rankPosition! <= 8);
 
-  const emptySlot = { playerId: "", groupId: "" };
+  const winnerMap = new Map(groupWinners.map(w => [w.groupId, w]));
+  const runnerMap = new Map(runnersUp.map(r => [r.groupId, r]));
+  const thirdByGroup = new Map(qualifiedThirds.map(t => [t.groupId, t]));
 
-  const pot1: typeof groupWinners = [...groupWinners.slice(0, 8)];
-  while (pot1.length < 8) pot1.push(emptySlot);
+  const reservedRunnerThirds: { runnerGroup: string; thirdGroup: string }[] = [
+    { runnerGroup: 'I', thirdGroup: 'G' },
+    { runnerGroup: 'G', thirdGroup: 'C' },
+  ];
 
-  const pot2: typeof groupWinners = [...groupWinners.slice(8), ...runnersUp.slice(0, 4)];
-  while (pot2.length < 8) pot2.push(emptySlot);
+  const reservedThirdGroups = new Set(reservedRunnerThirds.map(r => r.thirdGroup));
+  const reservedRunnerGroups = new Set(reservedRunnerThirds.map(r => r.runnerGroup));
+  const availableThirds = qualifiedThirds.filter(t => !reservedThirdGroups.has(t.groupId));
+  const allRunnerGroupIds = runnersUp.map(r => r.groupId);
 
-  const pot3: typeof groupWinners = [...runnersUp.slice(4)];
-  while (pot3.length < 8) pot3.push(emptySlot);
+  const idealThirdWinners: { group: string; allowed: string[] }[] = [
+    { group: 'A', allowed: ['C', 'D', 'E'] },
+    { group: 'B', allowed: ['A', 'C', 'D'] },
+    { group: 'C', allowed: ['F', 'G', 'H'] },
+    { group: 'E', allowed: ['A', 'B', 'C'] },
+    { group: 'F', allowed: ['C', 'E', 'G'] },
+    { group: 'H', allowed: ['I', 'J', 'K'] },
+    { group: 'I', allowed: ['G', 'H', 'J'] },
+    { group: 'J', allowed: ['H', 'I', 'K'] },
+  ];
 
-  const pot4: typeof groupWinners = [...qualifiedThirds.map(t => ({ playerId: t.playerId, groupId: t.groupId }))];
-  while (pot4.length < 8) pot4.push(emptySlot);
+  const runnerUpAssignments: { winnerGroup: string; runnerGroup: string }[] = [
+    { winnerGroup: 'D', runnerGroup: 'B' },
+    { winnerGroup: 'G', runnerGroup: 'A' },
+    { winnerGroup: 'K', runnerGroup: 'C' },
+    { winnerGroup: 'L', runnerGroup: 'E' },
+  ];
+
+  const usedThirds = new Set<string>();
+  const thirdForWinner = new Map<string, string>();
+  const failedWinners: string[] = [];
+  let remainingThirds = [...availableThirds];
+
+  for (const { group, allowed } of idealThirdWinners) {
+    const idx = remainingThirds.findIndex(
+      t => allowed.includes(t.groupId) && !usedThirds.has(t.playerId)
+    );
+    if (idx !== -1) {
+      const pick = remainingThirds.splice(idx, 1)[0];
+      thirdForWinner.set(group, pick.playerId);
+      usedThirds.add(pick.playerId);
+    } else {
+      failedWinners.push(group);
+    }
+  }
+
+  for (const failedW of [...failedWinners]) {
+    if (remainingThirds.length === 0 || runnerUpAssignments.length === 0) break;
+    const swap = runnerUpAssignments.shift()!;
+    const third = remainingThirds.shift()!;
+    thirdForWinner.set(swap.winnerGroup, third.playerId);
+    usedThirds.add(third.playerId);
+    runnerUpAssignments.push({ winnerGroup: failedW, runnerGroup: swap.runnerGroup });
+    const fi = failedWinners.indexOf(failedW);
+    if (fi !== -1) failedWinners.splice(fi, 1);
+  }
+
+  const usedRunnerGroups = new Set(runnerUpAssignments.map(ru => ru.runnerGroup));
+  reservedRunnerGroups.forEach(g => usedRunnerGroups.add(g));
+  const freeRunnerGroups = allRunnerGroupIds.filter(g => !usedRunnerGroups.has(g));
+
+  for (const failedW of failedWinners) {
+    if (freeRunnerGroups.length === 0) break;
+    const rg = freeRunnerGroups.shift()!;
+    runnerUpAssignments.push({ winnerGroup: failedW, runnerGroup: rg });
+  }
+
+  const allUsedRunners = new Set(runnerUpAssignments.map(ru => ru.runnerGroup));
+  reservedRunnerGroups.forEach(g => allUsedRunners.add(g));
+  const leftoverRunners = allRunnerGroupIds.filter(g => !allUsedRunners.has(g));
+  const runnerRunnerMatchups: { p1Group: string; p2Group: string }[] = [];
+  for (let i = 0; i < leftoverRunners.length - 1; i += 2) {
+    runnerRunnerMatchups.push({ p1Group: leftoverRunners[i], p2Group: leftoverRunners[i + 1] });
+  }
+
+  const allBrackets: { player1Id: string; player2Id: string }[] = [];
+
+  for (const wGroup of thirdForWinner.keys()) {
+    const winner = winnerMap.get(wGroup) ?? { playerId: "", groupId: "" };
+    const thirdId = thirdForWinner.get(wGroup) ?? "";
+    allBrackets.push({ player1Id: winner.playerId, player2Id: thirdId });
+  }
+
+  for (const rt of reservedRunnerThirds) {
+    const runner = runnerMap.get(rt.runnerGroup) ?? { playerId: "", groupId: "" };
+    const third = thirdByGroup.get(rt.thirdGroup) ?? { playerId: "", groupId: "" };
+    allBrackets.push({ player1Id: runner.playerId, player2Id: third.playerId });
+  }
+
+  for (const ru of runnerUpAssignments) {
+    const p1 = winnerMap.get(ru.winnerGroup) ?? { playerId: "", groupId: "" };
+    const p2 = runnerMap.get(ru.runnerGroup) ?? { playerId: "", groupId: "" };
+    allBrackets.push({ player1Id: p1.playerId, player2Id: p2.playerId });
+  }
+
+  for (const rr of runnerRunnerMatchups) {
+    const p1 = runnerMap.get(rr.p1Group) ?? { playerId: "", groupId: "" };
+    const p2 = runnerMap.get(rr.p2Group) ?? { playerId: "", groupId: "" };
+    allBrackets.push({ player1Id: p1.playerId, player2Id: p2.playerId });
+  }
 
   const rooms: BracketPairing[] = [];
   const allPlayers = state.players;
 
   for (let i = 0; i < 8; i++) {
-    const p1 = pot1[i];
-    const p2 = pot2[i];
-    const p3 = pot3[i];
-    const p4 = pot4[i];
+    const bA = allBrackets[i * 2] ?? { player1Id: "", player2Id: "" };
+    const bB = allBrackets[i * 2 + 1] ?? { player1Id: "", player2Id: "" };
 
     rooms.push({
       roomId: `R16_SALA${i + 1}`,
       bracketA: {
-        player1Id: p1.playerId,
-        player1Name: p1.playerId ? playerName(allPlayers.find(p => p.id === p1.playerId), p1.playerId) : "Por definir",
-        player2Id: p2.playerId,
-        player2Name: p2.playerId ? playerName(allPlayers.find(p => p.id === p2.playerId), p2.playerId) : "Por definir",
+        player1Id: bA.player1Id,
+        player1Name: bA.player1Id ? playerName(allPlayers.find(p => p.id === bA.player1Id), bA.player1Id) : "Por definir",
+        player2Id: bA.player2Id,
+        player2Name: bA.player2Id ? playerName(allPlayers.find(p => p.id === bA.player2Id), bA.player2Id) : "Por definir",
       },
       bracketB: {
-        player1Id: p3.playerId,
-        player1Name: p3.playerId ? playerName(allPlayers.find(p => p.id === p3.playerId), p3.playerId) : "Por definir",
-        player2Id: p4.playerId,
-        player2Name: p4.playerId ? playerName(allPlayers.find(p => p.id === p4.playerId), p4.playerId) : "Por definir",
+        player1Id: bB.player1Id,
+        player1Name: bB.player1Id ? playerName(allPlayers.find(p => p.id === bB.player1Id), bB.player1Id) : "Por definir",
+        player2Id: bB.player2Id,
+        player2Name: bB.player2Id ? playerName(allPlayers.find(p => p.id === bB.player2Id), bB.player2Id) : "Por definir",
       },
     });
   }

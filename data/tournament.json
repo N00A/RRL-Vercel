@@ -69,6 +69,12 @@
       ],
       "races": [],
       "penalties": [],
+      "finalRanking": [
+        { "playerId": "suiza", "position": 1, "totalMkPoints": 180, "groupPoints": 9 },
+        { "playerId": "canada", "position": 2, "totalMkPoints": 120, "groupPoints": 6 },
+        { "playerId": "catar", "position": 3, "totalMkPoints": 100, "groupPoints": 3 },
+        { "playerId": "bosnia", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+      ],
       "date": "2026-07-08T20:00:00"
     },
     {
