@@ -1,5 +1,5 @@
 {
-  "phase": "GROUPS",
+  "phase": "QF",
   "groups": [
     {
       "groupId": "A",
@@ -32,10 +32,30 @@
       "races": [],
       "penalties": [],
       "finalRanking": [
-        { "playerId": "corea-del-sur", "position": 1, "totalMkPoints": 180, "groupPoints": 9 },
-        { "playerId": "mexico", "position": 2, "totalMkPoints": 119, "groupPoints": 6 },
-        { "playerId": "republica-checa", "position": 3, "totalMkPoints": 89, "groupPoints": 3 },
-        { "playerId": "rumania", "position": 4, "totalMkPoints": 76, "groupPoints": 0 }
+        {
+          "playerId": "corea-del-sur",
+          "position": 1,
+          "totalMkPoints": 180,
+          "groupPoints": 9
+        },
+        {
+          "playerId": "mexico",
+          "position": 2,
+          "totalMkPoints": 119,
+          "groupPoints": 6
+        },
+        {
+          "playerId": "republica-checa",
+          "position": 3,
+          "totalMkPoints": 89,
+          "groupPoints": 3
+        },
+        {
+          "playerId": "rumania",
+          "position": 4,
+          "totalMkPoints": 76,
+          "groupPoints": 0
+        }
       ],
       "date": "2026-07-08T20:00:00"
     },
@@ -70,10 +90,30 @@
       "races": [],
       "penalties": [],
       "finalRanking": [
-        { "playerId": "suiza", "position": 1, "totalMkPoints": 180, "groupPoints": 9 },
-        { "playerId": "canada", "position": 2, "totalMkPoints": 120, "groupPoints": 6 },
-        { "playerId": "catar", "position": 3, "totalMkPoints": 100, "groupPoints": 3 },
-        { "playerId": "bosnia", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+        {
+          "playerId": "suiza",
+          "position": 1,
+          "totalMkPoints": 180,
+          "groupPoints": 9
+        },
+        {
+          "playerId": "canada",
+          "position": 2,
+          "totalMkPoints": 120,
+          "groupPoints": 6
+        },
+        {
+          "playerId": "catar",
+          "position": 3,
+          "totalMkPoints": 100,
+          "groupPoints": 3
+        },
+        {
+          "playerId": "bosnia",
+          "position": 4,
+          "totalMkPoints": 0,
+          "groupPoints": 0
+        }
       ],
       "date": "2026-07-08T20:00:00"
     },
@@ -108,10 +148,30 @@
       "races": [],
       "penalties": [],
       "finalRanking": [
-        { "playerId": "haiti", "position": 1, "totalMkPoints": 158, "groupPoints": 9 },
-        { "playerId": "escocia", "position": 2, "totalMkPoints": 155, "groupPoints": 6 },
-        { "playerId": "brasil", "position": 3, "totalMkPoints": 120, "groupPoints": 3 },
-        { "playerId": "marruecos", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+        {
+          "playerId": "haiti",
+          "position": 1,
+          "totalMkPoints": 158,
+          "groupPoints": 9
+        },
+        {
+          "playerId": "escocia",
+          "position": 2,
+          "totalMkPoints": 155,
+          "groupPoints": 6
+        },
+        {
+          "playerId": "brasil",
+          "position": 3,
+          "totalMkPoints": 120,
+          "groupPoints": 3
+        },
+        {
+          "playerId": "marruecos",
+          "position": 4,
+          "totalMkPoints": 0,
+          "groupPoints": 0
+        }
       ],
       "date": "2026-07-01T20:00:00"
     },
@@ -146,10 +206,30 @@
       "races": [],
       "penalties": [],
       "finalRanking": [
-        { "playerId": "australia", "position": 1, "totalMkPoints": 180, "groupPoints": 9 },
-        { "playerId": "paraguay", "position": 2, "totalMkPoints": 144, "groupPoints": 6 },
-        { "playerId": "usa", "position": 3, "totalMkPoints": 0, "groupPoints": 0 },
-        { "playerId": "turquia", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+        {
+          "playerId": "australia",
+          "position": 1,
+          "totalMkPoints": 180,
+          "groupPoints": 9
+        },
+        {
+          "playerId": "paraguay",
+          "position": 2,
+          "totalMkPoints": 144,
+          "groupPoints": 6
+        },
+        {
+          "playerId": "usa",
+          "position": 3,
+          "totalMkPoints": 0,
+          "groupPoints": 0
+        },
+        {
+          "playerId": "turquia",
+          "position": 4,
+          "totalMkPoints": 0,
+          "groupPoints": 0
+        }
       ],
       "date": "2026-07-01T20:00:00"
     },
@@ -184,10 +264,30 @@
       "races": [],
       "penalties": [],
       "finalRanking": [
-        { "playerId": "costa-de-marfil", "position": 1, "totalMkPoints": 180, "groupPoints": 9 },
-        { "playerId": "curazao", "position": 2, "totalMkPoints": 132, "groupPoints": 6 },
-        { "playerId": "alemania", "position": 3, "totalMkPoints": 92, "groupPoints": 3 },
-        { "playerId": "ecuador", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+        {
+          "playerId": "costa-de-marfil",
+          "position": 1,
+          "totalMkPoints": 180,
+          "groupPoints": 9
+        },
+        {
+          "playerId": "curazao",
+          "position": 2,
+          "totalMkPoints": 132,
+          "groupPoints": 6
+        },
+        {
+          "playerId": "alemania",
+          "position": 3,
+          "totalMkPoints": 92,
+          "groupPoints": 3
+        },
+        {
+          "playerId": "ecuador",
+          "position": 4,
+          "totalMkPoints": 0,
+          "groupPoints": 0
+        }
       ],
       "date": "2026-07-02T20:00:00"
     },
@@ -222,10 +322,30 @@
       "races": [],
       "penalties": [],
       "finalRanking": [
-        { "playerId": "tunez", "position": 1, "totalMkPoints": 180, "groupPoints": 9 },
-        { "playerId": "paises-bajos", "position": 2, "totalMkPoints": 150, "groupPoints": 6 },
-        { "playerId": "japon", "position": 3, "totalMkPoints": 0, "groupPoints": 3 },
-        { "playerId": "suecia", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+        {
+          "playerId": "tunez",
+          "position": 1,
+          "totalMkPoints": 180,
+          "groupPoints": 9
+        },
+        {
+          "playerId": "paises-bajos",
+          "position": 2,
+          "totalMkPoints": 150,
+          "groupPoints": 6
+        },
+        {
+          "playerId": "japon",
+          "position": 3,
+          "totalMkPoints": 0,
+          "groupPoints": 3
+        },
+        {
+          "playerId": "suecia",
+          "position": 4,
+          "totalMkPoints": 0,
+          "groupPoints": 0
+        }
       ],
       "date": "2026-07-05T21:00:00"
     },
@@ -260,10 +380,30 @@
       "races": [],
       "penalties": [],
       "finalRanking": [
-        { "playerId": "egipto", "position": 1, "totalMkPoints": 174, "groupPoints": 9 },
-        { "playerId": "iran", "position": 2, "totalMkPoints": 135, "groupPoints": 6 },
-        { "playerId": "belgica", "position": 3, "totalMkPoints": 121, "groupPoints": 3 },
-        { "playerId": "nz", "position": 4, "totalMkPoints": 101, "groupPoints": 0 }
+        {
+          "playerId": "egipto",
+          "position": 1,
+          "totalMkPoints": 174,
+          "groupPoints": 9
+        },
+        {
+          "playerId": "iran",
+          "position": 2,
+          "totalMkPoints": 135,
+          "groupPoints": 6
+        },
+        {
+          "playerId": "belgica",
+          "position": 3,
+          "totalMkPoints": 121,
+          "groupPoints": 3
+        },
+        {
+          "playerId": "nz",
+          "position": 4,
+          "totalMkPoints": 101,
+          "groupPoints": 0
+        }
       ],
       "date": "2026-07-02T20:00:00"
     },
@@ -298,10 +438,30 @@
       "races": [],
       "penalties": [],
       "finalRanking": [
-        { "playerId": "cabo-verde", "position": 1, "totalMkPoints": 154, "groupPoints": 9 },
-        { "playerId": "uruguay", "position": 2, "totalMkPoints": 146, "groupPoints": 6 },
-        { "playerId": "espana", "position": 3, "totalMkPoints": 93, "groupPoints": 3 },
-        { "playerId": "arabia-saudita", "position": 4, "totalMkPoints": 87, "groupPoints": 0 }
+        {
+          "playerId": "cabo-verde",
+          "position": 1,
+          "totalMkPoints": 154,
+          "groupPoints": 9
+        },
+        {
+          "playerId": "uruguay",
+          "position": 2,
+          "totalMkPoints": 146,
+          "groupPoints": 6
+        },
+        {
+          "playerId": "espana",
+          "position": 3,
+          "totalMkPoints": 93,
+          "groupPoints": 3
+        },
+        {
+          "playerId": "arabia-saudita",
+          "position": 4,
+          "totalMkPoints": 87,
+          "groupPoints": 0
+        }
       ],
       "date": "2026-07-02T20:00:00"
     },
@@ -336,10 +496,30 @@
       "races": [],
       "penalties": [],
       "finalRanking": [
-        { "playerId": "irak", "position": 1, "totalMkPoints": 158, "groupPoints": 9 },
-        { "playerId": "noruega", "position": 2, "totalMkPoints": 153, "groupPoints": 6 },
-        { "playerId": "francia", "position": 3, "totalMkPoints": 88, "groupPoints": 3 },
-        { "playerId": "senegal", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+        {
+          "playerId": "irak",
+          "position": 1,
+          "totalMkPoints": 158,
+          "groupPoints": 9
+        },
+        {
+          "playerId": "noruega",
+          "position": 2,
+          "totalMkPoints": 153,
+          "groupPoints": 6
+        },
+        {
+          "playerId": "francia",
+          "position": 3,
+          "totalMkPoints": 88,
+          "groupPoints": 3
+        },
+        {
+          "playerId": "senegal",
+          "position": 4,
+          "totalMkPoints": 0,
+          "groupPoints": 0
+        }
       ],
       "date": "2026-07-06T20:00:00"
     },
@@ -374,10 +554,30 @@
       "races": [],
       "penalties": [],
       "finalRanking": [
-        { "playerId": "argentina", "position": 1, "totalMkPoints": 180, "groupPoints": 9 },
-        { "playerId": "argelia", "position": 2, "totalMkPoints": 0, "groupPoints": 6 },
-        { "playerId": "austria", "position": 3, "totalMkPoints": 0, "groupPoints": 3 },
-        { "playerId": "jordania", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+        {
+          "playerId": "argentina",
+          "position": 1,
+          "totalMkPoints": 180,
+          "groupPoints": 9
+        },
+        {
+          "playerId": "argelia",
+          "position": 2,
+          "totalMkPoints": 0,
+          "groupPoints": 6
+        },
+        {
+          "playerId": "austria",
+          "position": 3,
+          "totalMkPoints": 0,
+          "groupPoints": 3
+        },
+        {
+          "playerId": "jordania",
+          "position": 4,
+          "totalMkPoints": 0,
+          "groupPoints": 0
+        }
       ],
       "date": "2026-07-06T20:00:00"
     },
@@ -412,10 +612,30 @@
       "races": [],
       "penalties": [],
       "finalRanking": [
-        { "playerId": "rd-congo", "position": 1, "totalMkPoints": 165, "groupPoints": 9 },
-        { "playerId": "colombia", "position": 2, "totalMkPoints": 151, "groupPoints": 6 },
-        { "playerId": "uzbekistan", "position": 3, "totalMkPoints": 105, "groupPoints": 3 },
-        { "playerId": "portugal", "position": 4, "totalMkPoints": 0, "groupPoints": 0 }
+        {
+          "playerId": "rd-congo",
+          "position": 1,
+          "totalMkPoints": 165,
+          "groupPoints": 9
+        },
+        {
+          "playerId": "colombia",
+          "position": 2,
+          "totalMkPoints": 151,
+          "groupPoints": 6
+        },
+        {
+          "playerId": "uzbekistan",
+          "position": 3,
+          "totalMkPoints": 105,
+          "groupPoints": 3
+        },
+        {
+          "playerId": "portugal",
+          "position": 4,
+          "totalMkPoints": 0,
+          "groupPoints": 0
+        }
       ],
       "date": "2026-07-06T20:00:00"
     },
@@ -450,15 +670,344 @@
       "races": [],
       "penalties": [],
       "finalRanking": [
-        { "playerId": "ghana", "position": 1, "totalMkPoints": 169, "groupPoints": 9 },
-        { "playerId": "inglaterra", "position": 2, "totalMkPoints": 150, "groupPoints": 6 },
-        { "playerId": "croacia", "position": 3, "totalMkPoints": 105, "groupPoints": 3 },
-        { "playerId": "panama", "position": 4, "totalMkPoints": 104, "groupPoints": 0 }
+        {
+          "playerId": "ghana",
+          "position": 1,
+          "totalMkPoints": 169,
+          "groupPoints": 9
+        },
+        {
+          "playerId": "inglaterra",
+          "position": 2,
+          "totalMkPoints": 150,
+          "groupPoints": 6
+        },
+        {
+          "playerId": "croacia",
+          "position": 3,
+          "totalMkPoints": 105,
+          "groupPoints": 3
+        },
+        {
+          "playerId": "panama",
+          "position": 4,
+          "totalMkPoints": 104,
+          "groupPoints": 0
+        }
       ],
       "date": "2026-07-06T20:00:00"
     }
   ],
-  "eliminationRooms": [],
+  "eliminationRooms": [
+    {
+      "roomId": "R16_SALA1",
+      "phase": "R16",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "corea-del-sur",
+          "player2Id": "alemania",
+          "winnerId": "corea-del-sur"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "suiza",
+          "player2Id": "republica-checa",
+          "winnerId": "suiza"
+        }
+      ],
+      "completed": true,
+      "racePositions": [
+        {
+          "playerId": "suiza",
+          "position": 1,
+          "mkPoints": 155
+        },
+        {
+          "playerId": "corea-del-sur",
+          "position": 2,
+          "mkPoints": 0
+        },
+        {
+          "playerId": "republica-checa",
+          "position": 3,
+          "mkPoints": 129
+        },
+        {
+          "playerId": "alemania",
+          "position": 4,
+          "mkPoints": 0
+        }
+      ]
+    },
+    {
+      "roomId": "R16_SALA2",
+      "phase": "R16",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "haiti",
+          "player2Id": "espana",
+          "winnerId": "haiti"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "costa-de-marfil",
+          "player2Id": "catar",
+          "winnerId": "costa-de-marfil"
+        }
+      ],
+      "completed": true
+    },
+    {
+      "roomId": "R16_SALA3",
+      "phase": "R16",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "cabo-verde",
+          "player2Id": "uzbekistan",
+          "winnerId": "cabo-verde"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "australia",
+          "player2Id": "croacia",
+          "winnerId": "australia"
+        }
+      ],
+      "completed": true
+    },
+    {
+      "roomId": "R16_SALA4",
+      "phase": "R16",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "noruega",
+          "player2Id": "belgica",
+          "winnerId": "noruega"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "iran",
+          "player2Id": "brasil",
+          "winnerId": "iran"
+        }
+      ],
+      "completed": true
+    },
+    {
+      "roomId": "R16_SALA5",
+      "phase": "R16",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "egipto",
+          "player2Id": "mexico",
+          "winnerId": "egipto"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "rd-congo",
+          "player2Id": "escocia",
+          "winnerId": "rd-congo"
+        }
+      ],
+      "completed": true,
+      "racePositions": [
+        {
+          "playerId": "rd-congo",
+          "position": 1,
+          "mkPoints": 171
+        },
+        {
+          "playerId": "egipto",
+          "position": 2,
+          "mkPoints": 0
+        },
+        {
+          "playerId": "escocia",
+          "position": 3,
+          "mkPoints": 149
+        },
+        {
+          "playerId": "mexico",
+          "position": 4,
+          "mkPoints": 0
+        }
+      ]
+    },
+    {
+      "roomId": "R16_SALA6",
+      "phase": "R16",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "ghana",
+          "player2Id": "curazao",
+          "winnerId": "curazao"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "tunez",
+          "player2Id": "canada",
+          "winnerId": "tunez"
+        }
+      ],
+      "completed": true,
+      "racePositions": [
+        {
+          "playerId": "curazao",
+          "position": 1,
+          "mkPoints": 180
+        },
+        {
+          "playerId": "tunez",
+          "position": 2,
+          "mkPoints": 0
+        },
+        {
+          "playerId": "ghana",
+          "position": 3,
+          "mkPoints": 0
+        },
+        {
+          "playerId": "canada",
+          "position": 4,
+          "mkPoints": 0
+        }
+      ]
+    },
+    {
+      "roomId": "R16_SALA7",
+      "phase": "R16",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "irak",
+          "player2Id": "paraguay",
+          "winnerId": "irak"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "argentina",
+          "player2Id": "paises-bajos",
+          "winnerId": "argentina"
+        }
+      ],
+      "completed": true
+    },
+    {
+      "roomId": "R16_SALA8",
+      "phase": "R16",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "uruguay",
+          "player2Id": "argelia",
+          "winnerId": "uruguay"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "colombia",
+          "player2Id": "inglaterra",
+          "winnerId": "inglaterra"
+        }
+      ],
+      "completed": true,
+      "racePositions": [
+        {
+          "playerId": "inglaterra",
+          "position": 1,
+          "mkPoints": 180
+        },
+        {
+          "playerId": "uruguay",
+          "position": 2,
+          "mkPoints": 0
+        },
+        {
+          "playerId": "colombia",
+          "position": 3,
+          "mkPoints": 0
+        },
+        {
+          "playerId": "argelia",
+          "position": 4,
+          "mkPoints": 0
+        }
+      ]
+    },
+    {
+      "roomId": "QF_SALA1",
+      "phase": "QF",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "corea-del-sur",
+          "player2Id": "suiza"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "haiti",
+          "player2Id": "costa-de-marfil"
+        }
+      ],
+      "completed": false
+    },
+    {
+      "roomId": "QF_SALA2",
+      "phase": "QF",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "cabo-verde",
+          "player2Id": "australia"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "noruega",
+          "player2Id": "iran"
+        }
+      ],
+      "completed": false
+    },
+    {
+      "roomId": "QF_SALA3",
+      "phase": "QF",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "egipto",
+          "player2Id": "rd-congo"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "curazao",
+          "player2Id": "tunez"
+        }
+      ],
+      "completed": false
+    },
+    {
+      "roomId": "QF_SALA4",
+      "phase": "QF",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "irak",
+          "player2Id": "argentina"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "uruguay",
+          "player2Id": "inglaterra"
+        }
+      ],
+      "completed": false
+    }
+  ],
   "players": [
     {
       "id": "mexico",

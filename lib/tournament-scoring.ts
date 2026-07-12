@@ -157,6 +157,14 @@ export function computeTopScorers(state: TournamentState): { playerId: string; t
   }
 
   for (const room of state.eliminationRooms) {
+    if (room.racePositions) {
+      for (const rp of room.racePositions) {
+        if (rp.mkPoints) {
+          const current = totals.get(rp.playerId) ?? 0;
+          totals.set(rp.playerId, current + rp.mkPoints);
+        }
+      }
+    }
     const penalties = room.penalties ?? [];
     for (const p of penalties) {
       const current = totals.get(p.playerId) ?? 0;

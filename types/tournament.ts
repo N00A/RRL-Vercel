@@ -54,7 +54,7 @@ export type EliminationRoom = {
   roomId: string
   phase: "R16" | "QF" | "SF" | "F"
   brackets: [Bracket, Bracket]
-  racePositions?: { playerId: string; position: number }[]
+  racePositions?: { playerId: string; position: number; mkPoints?: number }[]
   completed: boolean
   penalties?: Penalty[]
 }
