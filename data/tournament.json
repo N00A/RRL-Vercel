@@ -1,5 +1,5 @@
 {
-  "phase": "QF",
+  "phase": "SF",
   "groups": [
     {
       "groupId": "A",
@@ -946,15 +946,23 @@
         {
           "bracketId": "A",
           "player1Id": "corea-del-sur",
-          "player2Id": "suiza"
+          "player2Id": "suiza",
+          "winnerId": "corea-del-sur"
         },
         {
           "bracketId": "B",
           "player1Id": "haiti",
-          "player2Id": "costa-de-marfil"
+          "player2Id": "costa-de-marfil",
+          "winnerId": "costa-de-marfil"
         }
       ],
-      "completed": false
+      "racePositions": [
+        { "playerId": "costa-de-marfil", "position": 1, "mkPoints": 172 },
+        { "playerId": "corea-del-sur", "position": 2, "mkPoints": 146 },
+        { "playerId": "haiti", "position": 3, "mkPoints": 136 },
+        { "playerId": "suiza", "position": 4, "mkPoints": 75 }
+      ],
+      "completed": true
     },
     {
       "roomId": "QF_SALA2",
@@ -963,15 +971,23 @@
         {
           "bracketId": "A",
           "player1Id": "cabo-verde",
-          "player2Id": "australia"
+          "player2Id": "australia",
+          "winnerId": "australia"
         },
         {
           "bracketId": "B",
           "player1Id": "noruega",
-          "player2Id": "iran"
+          "player2Id": "iran",
+          "winnerId": "noruega"
         }
       ],
-      "completed": false
+      "racePositions": [
+        { "playerId": "noruega", "position": 1, "mkPoints": 154 },
+        { "playerId": "australia", "position": 2, "mkPoints": 143 },
+        { "playerId": "iran", "position": 3, "mkPoints": 128 },
+        { "playerId": "cabo-verde", "position": 4, "mkPoints": 117 }
+      ],
+      "completed": true
     },
     {
       "roomId": "QF_SALA3",
@@ -980,15 +996,23 @@
         {
           "bracketId": "A",
           "player1Id": "egipto",
-          "player2Id": "rd-congo"
+          "player2Id": "rd-congo",
+          "winnerId": "egipto"
         },
         {
           "bracketId": "B",
           "player1Id": "curazao",
-          "player2Id": "tunez"
+          "player2Id": "tunez",
+          "winnerId": "tunez"
         }
       ],
-      "completed": false
+      "racePositions": [
+        { "playerId": "egipto", "position": 1, "mkPoints": 157 },
+        { "playerId": "rd-congo", "position": 2, "mkPoints": 145 },
+        { "playerId": "tunez", "position": 3, "mkPoints": 126 },
+        { "playerId": "curazao", "position": 4, "mkPoints": 109 }
+      ],
+      "completed": true
     },
     {
       "roomId": "QF_SALA4",
@@ -997,11 +1021,53 @@
         {
           "bracketId": "A",
           "player1Id": "irak",
-          "player2Id": "argentina"
+          "player2Id": "argentina",
+          "winnerId": "irak"
         },
         {
           "bracketId": "B",
           "player1Id": "uruguay",
+          "player2Id": "inglaterra",
+          "winnerId": "inglaterra"
+        }
+      ],
+      "racePositions": [
+        { "playerId": "irak", "position": 1, "mkPoints": 163 },
+        { "playerId": "argentina", "position": 2, "mkPoints": 138 },
+        { "playerId": "inglaterra", "position": 3, "mkPoints": 126 },
+        { "playerId": "uruguay", "position": 4, "mkPoints": 0 }
+      ],
+      "completed": true
+    },
+    {
+      "roomId": "SF_SALA1",
+      "phase": "SF",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "corea-del-sur",
+          "player2Id": "costa-de-marfil"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "noruega",
+          "player2Id": "australia"
+        }
+      ],
+      "completed": false
+    },
+    {
+      "roomId": "SF_SALA2",
+      "phase": "SF",
+      "brackets": [
+        {
+          "bracketId": "A",
+          "player1Id": "egipto",
+          "player2Id": "tunez"
+        },
+        {
+          "bracketId": "B",
+          "player1Id": "irak",
           "player2Id": "inglaterra"
         }
       ],
