@@ -86,8 +86,9 @@ export default function TournamentDetailPage({
     }
 
     const standings = Array.from(playerMap.values());
+    const countFirsts = (p: PlayerStanding) => p.rounds.filter((r) => r.groupPosition === 1).length;
     standings.sort(
-      (a, b) => b.finalPoints - a.finalPoints || b.totalPoints - a.totalPoints
+      (a, b) => b.finalPoints - a.finalPoints || countFirsts(b) - countFirsts(a) || b.totalPoints - a.totalPoints
     );
     setPlayerStandings(standings);
   }

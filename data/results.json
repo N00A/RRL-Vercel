@@ -70,5 +70,15 @@
   { "id": "r69", "tournamentId": "t3", "playerId": "rrl17", "round": 5, "repickCount": 0, "totalPoints": 154, "group": "B", "createdAt": "2026-07-05T20:00:00Z", "updatedAt": "2026-07-05T20:00:00Z" },
   { "id": "r70", "tournamentId": "t3", "playerId": "rrl10", "round": 5, "repickCount": 0, "totalPoints": 143, "group": "B", "createdAt": "2026-07-05T20:00:00Z", "updatedAt": "2026-07-05T20:00:00Z" },
   { "id": "r71", "tournamentId": "t3", "playerId": "rrl1",  "round": 5, "repickCount": 0, "totalPoints": 139, "group": "B", "createdAt": "2026-07-05T20:00:00Z", "updatedAt": "2026-07-05T20:00:00Z" },
-  { "id": "r72", "tournamentId": "t3", "playerId": "rrl4",  "round": 5, "repickCount": 0, "totalPoints": 78,  "group": "B", "createdAt": "2026-07-05T20:00:00Z", "updatedAt": "2026-07-05T20:00:00Z" }
+  { "id": "r72", "tournamentId": "t3", "playerId": "rrl4",  "round": 5, "repickCount": 0, "totalPoints": 78,  "group": "B", "createdAt": "2026-07-05T20:00:00Z", "updatedAt": "2026-07-05T20:00:00Z" },
+  { "id": "r73", "tournamentId": "t3", "playerId": "rrl10", "round": 6, "repickCount": 0, "totalPoints": 141, "group": "SALA 1", "createdAt": "2026-07-12T20:00:00Z", "updatedAt": "2026-07-12T20:00:00Z" },
+  { "id": "r74", "tournamentId": "t3", "playerId": "rrl17", "round": 6, "repickCount": 0, "totalPoints": 139, "group": "SALA 1", "createdAt": "2026-07-12T20:00:00Z", "updatedAt": "2026-07-12T20:00:00Z" },
+  { "id": "r75", "tournamentId": "t3", "playerId": "rrl2",  "round": 6, "repickCount": 0, "totalPoints": 109, "group": "SALA 1", "createdAt": "2026-07-12T20:00:00Z", "updatedAt": "2026-07-12T20:00:00Z" },
+  { "id": "r76", "tournamentId": "t3", "playerId": "rrl9",  "round": 6, "repickCount": 0, "totalPoints": 95,  "group": "SALA 1", "createdAt": "2026-07-12T20:00:00Z", "updatedAt": "2026-07-12T20:00:00Z" },
+  { "id": "r77", "tournamentId": "t3", "playerId": "rrl4",  "round": 6, "repickCount": 0, "totalPoints": 87,  "group": "SALA 1", "createdAt": "2026-07-12T20:00:00Z", "updatedAt": "2026-07-12T20:00:00Z" },
+  { "id": "r78", "tournamentId": "t3", "playerId": "rrl12", "round": 6, "repickCount": 0, "totalPoints": 81,  "group": "SALA 1", "createdAt": "2026-07-12T20:00:00Z", "updatedAt": "2026-07-12T20:00:00Z" },
+  { "id": "r79", "tournamentId": "t3", "playerId": "rrl6",  "round": 6, "repickCount": 0, "totalPoints": 79,  "group": "SALA 1", "createdAt": "2026-07-12T20:00:00Z", "updatedAt": "2026-07-12T20:00:00Z" },
+  { "id": "r80", "tournamentId": "t3", "playerId": "rrl8",  "round": 6, "repickCount": 0, "totalPoints": 74,  "group": "SALA 1", "createdAt": "2026-07-12T20:00:00Z", "updatedAt": "2026-07-12T20:00:00Z" },
+  { "id": "r81", "tournamentId": "t3", "playerId": "rrl5",  "round": 6, "repickCount": 0, "totalPoints": 71,  "group": "SALA 1", "createdAt": "2026-07-12T20:00:00Z", "updatedAt": "2026-07-12T20:00:00Z" },
+  { "id": "r82", "tournamentId": "t3", "playerId": "rrl3",  "round": 6, "repickCount": 0, "totalPoints": 62,  "group": "SALA 1", "createdAt": "2026-07-12T20:00:00Z", "updatedAt": "2026-07-12T20:00:00Z" }
 ]

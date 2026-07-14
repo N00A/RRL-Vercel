@@ -317,8 +317,9 @@ export function getPlayerStandings(tournamentId: string): PlayerStanding[] {
     player.rounds.sort((a, b) => a.round - b.round);
   }
 
+  const countFirsts = (p: PlayerStanding) => p.rounds.filter((r) => r.groupPosition === 1).length;
   return Array.from(playerMap.values()).sort(
-    (a, b) => b.finalPoints - a.finalPoints || b.totalPoints - a.totalPoints
+    (a, b) => b.finalPoints - a.finalPoints || countFirsts(b) - countFirsts(a) || b.totalPoints - a.totalPoints
   );
 }
 
