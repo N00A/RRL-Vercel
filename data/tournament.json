@@ -1,5 +1,5 @@
 {
-  "phase": "SF",
+  "phase": "F",
   "groups": [
     {
       "groupId": "A",
@@ -1046,15 +1046,23 @@
         {
           "bracketId": "A",
           "player1Id": "corea-del-sur",
-          "player2Id": "costa-de-marfil"
+          "player2Id": "costa-de-marfil",
+          "winnerId": "costa-de-marfil"
         },
         {
           "bracketId": "B",
           "player1Id": "noruega",
-          "player2Id": "australia"
+          "player2Id": "australia",
+          "winnerId": "australia"
         }
       ],
-      "completed": false
+      "racePositions": [
+        { "playerId": "costa-de-marfil", "position": 1, "mkPoints": 167 },
+        { "playerId": "australia", "position": 2, "mkPoints": 139 },
+        { "playerId": "noruega", "position": 3, "mkPoints": 138 },
+        { "playerId": "corea-del-sur", "position": 4, "mkPoints": 0 }
+      ],
+      "completed": true
     },
     {
       "roomId": "SF_SALA2",
@@ -1063,14 +1071,33 @@
         {
           "bracketId": "A",
           "player1Id": "egipto",
-          "player2Id": "tunez"
+          "player2Id": "tunez",
+          "winnerId": "egipto"
         },
         {
           "bracketId": "B",
           "player1Id": "irak",
-          "player2Id": "inglaterra"
+          "player2Id": "inglaterra",
+          "winnerId": "inglaterra"
         }
       ],
+      "racePositions": [
+        { "playerId": "egipto", "position": 1, "mkPoints": 170 },
+        { "playerId": "inglaterra", "position": 2, "mkPoints": 130 },
+        { "playerId": "tunez", "position": 3, "mkPoints": 123 },
+        { "playerId": "irak", "position": 4, "mkPoints": 0 }
+      ],
+      "completed": true
+    },
+    {
+      "roomId": "F_SALA1",
+      "phase": "F",
+      "brackets": [
+        { "bracketId": "A", "player1Id": "", "player2Id": "" },
+        { "bracketId": "B", "player1Id": "", "player2Id": "" }
+      ],
+      "participants": ["costa-de-marfil", "australia", "egipto", "inglaterra"],
+      "freeForAll": true,
       "completed": false
     }
   ],

@@ -95,6 +95,25 @@ export function resolveRoom(room: EliminationRoom): {
     posMap.set(rp.playerId, rp.position);
   }
 
+  const sortedByPosition = [...room.racePositions].sort(
+    (a, b) => a.position - b.position
+  );
+
+  if (room.freeForAll) {
+    return {
+      winners: sortedByPosition.map((p) => p.playerId),
+      eliminated: [],
+      podium:
+        sortedByPosition.length >= 3
+          ? {
+              first: sortedByPosition[0].playerId,
+              second: sortedByPosition[1].playerId,
+              third: sortedByPosition[2].playerId,
+            }
+          : undefined,
+    };
+  }
+
   const resolveBracket = (b: Bracket): string | null => {
     const pos1 = posMap.get(b.player1Id);
     const pos2 = posMap.get(b.player2Id);
@@ -102,10 +121,6 @@ export function resolveRoom(room: EliminationRoom): {
     if (pos1 === pos2) return null;
     return pos1 < pos2 ? b.player1Id : b.player2Id;
   };
-
-  const sortedByPosition = [...room.racePositions].sort(
-    (a, b) => a.position - b.position
-  );
 
   const winners: string[] = [];
   const eliminated: string[] = [];

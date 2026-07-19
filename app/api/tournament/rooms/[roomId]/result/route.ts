@@ -56,9 +56,15 @@ export async function POST(
     }
 
     const roomPlayerIds = new Set<string>();
-    for (const bracket of room.brackets) {
-      roomPlayerIds.add(bracket.player1Id);
-      roomPlayerIds.add(bracket.player2Id);
+    if (room.freeForAll && room.participants) {
+      for (const pid of room.participants) {
+        roomPlayerIds.add(pid);
+      }
+    } else {
+      for (const bracket of room.brackets) {
+        roomPlayerIds.add(bracket.player1Id);
+        roomPlayerIds.add(bracket.player2Id);
+      }
     }
 
     const seen = new Set<string>();

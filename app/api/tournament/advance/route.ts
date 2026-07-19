@@ -141,8 +141,6 @@ function buildNextPhase(
 ): EliminationRoom[] {
   const phasePrefix =
     phase === "QF" ? "QF" : phase === "SF" ? "SF" : "F";
-  const playerCount = phase === "QF" ? 4 : phase === "SF" ? 2 : 1;
-  const roomsCount = prevRooms.length / 2;
 
   const allWinners: string[] = [];
   for (const room of prevRooms) {
@@ -151,6 +149,23 @@ function buildNextPhase(
       .filter((w): w is string => !!w);
     allWinners.push(...bracketWinners);
   }
+
+  if (phase === "F") {
+    const emptyBracket: Bracket = { bracketId: "A", player1Id: "", player2Id: "" };
+    return [
+      {
+        roomId: "F_SALA1",
+        phase: "F",
+        brackets: [emptyBracket, { ...emptyBracket, bracketId: "B" }],
+        participants: allWinners,
+        freeForAll: true,
+        completed: false,
+      },
+    ];
+  }
+
+  const playerCount = phase === "QF" ? 4 : 2;
+  const roomsCount = prevRooms.length / 2;
 
   const rooms: EliminationRoom[] = [];
   for (let i = 0; i < roomsCount; i++) {

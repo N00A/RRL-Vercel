@@ -707,19 +707,26 @@ function GenericRoomCard({ room, phaseLabel, players }: { room: EliminationRoom;
         <h4 className="font-semibold text-sm">{room.roomId.replace("_", " ")}</h4>
         <span className="text-xs text-white/40">{phaseLabel}</span>
       </div>
-      {room.brackets.map((b) => {
-        const p1 = playerName(players.find(p => p.id === b.player1Id), b.player1Id);
-        const p2 = playerName(players.find(p => p.id === b.player2Id), b.player2Id);
-        return (
-          <div key={b.bracketId} className="flex items-center gap-2 text-sm mb-1">
-            <span className="text-[10px] text-white/30 w-4">Llave {b.bracketId}:</span>
-            <span className={b.winnerId === b.player1Id ? "text-verde font-medium" : "text-white/70"}>{p1}</span>
-            <span className="text-white/30">vs</span>
-            <span className={b.winnerId === b.player2Id ? "text-verde font-medium" : "text-white/70"}>{p2}</span>
-            {b.winnerId && <span className="text-verde text-xs ml-1">✓</span>}
-          </div>
-        );
-      })}
+      {room.freeForAll ? (
+        <div className="text-sm text-white/70">
+          <span className="text-[10px] text-white/30 uppercase tracking-wide">Todos contra todos: </span>
+          {(room.participants ?? []).map((pid) => playerName(players.find(p => p.id === pid), pid)).join(" · ")}
+        </div>
+      ) : (
+        room.brackets.map((b) => {
+          const p1 = playerName(players.find(p => p.id === b.player1Id), b.player1Id);
+          const p2 = playerName(players.find(p => p.id === b.player2Id), b.player2Id);
+          return (
+            <div key={b.bracketId} className="flex items-center gap-2 text-sm mb-1">
+              <span className="text-[10px] text-white/30 w-4">Llave {b.bracketId}:</span>
+              <span className={b.winnerId === b.player1Id ? "text-verde font-medium" : "text-white/70"}>{p1}</span>
+              <span className="text-white/30">vs</span>
+              <span className={b.winnerId === b.player2Id ? "text-verde font-medium" : "text-white/70"}>{p2}</span>
+              {b.winnerId && <span className="text-verde text-xs ml-1">✓</span>}
+            </div>
+          );
+        })
+      )}
       {room.racePositions && (
         <div className="mt-2 pt-2 border-t border-white/10 flex gap-3 text-xs text-white/40">
           {[...room.racePositions].sort((a, b) => a.position - b.position).map((p) => (
