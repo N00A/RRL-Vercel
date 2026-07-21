@@ -1098,7 +1098,13 @@
       ],
       "participants": ["costa-de-marfil", "australia", "egipto", "inglaterra"],
       "freeForAll": true,
-      "completed": false
+      "racePositions": [
+        { "playerId": "costa-de-marfil", "position": 1, "mkPoints": 174 },
+        { "playerId": "egipto", "position": 2, "mkPoints": 135 },
+        { "playerId": "australia", "position": 3, "mkPoints": 126 },
+        { "playerId": "inglaterra", "position": 4, "mkPoints": 111 }
+      ],
+      "completed": true
     }
   ],
   "players": [
